@@ -60,6 +60,23 @@ class AuthController extends Controller
         }
     }
 
+    public function register(Request $request){
+        $user = User::create([
+            'full_name' => $request->full_name,
+            'email_address' => $request->email_address,
+            'password' => Hash::make($request->password),
+        ]);
+        $token = $user->createToken("token");
+        $this->response->status_code = 1;
+        $this->response->message = "success";
+        $this->response->data = [
+            "user" => $user,
+            "token" => $token->plainTextToken
+        ];
+        
+        return response()->json($this->response);
+    }
+
     public function logout(){
         $user = Auth::user();
         $user->tokens()->delete();
