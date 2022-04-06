@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('email_address')->unique();
             $table->string('password');
-            $table->string('avatar');
-            $table->integer('role_id');
+            $table->text('avatar');
+            $table->integer('role_id')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
