@@ -49,7 +49,7 @@ export default {
       const submitRequest = await axios.post('http://localhost/api/login', formSubmit)
       const response = await submitRequest.data
 
-      if (response.status_code == 1) {
+      if (response.status_code === 1) {
           csvc.setUserAndToken(response.data.user, response.data.token)
           router.push({ path : '/dashboard' })
       }
