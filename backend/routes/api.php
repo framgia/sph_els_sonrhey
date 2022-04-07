@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,6 @@ Route::post('register', [AuthController::class, 'register']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('test', [AuthController::class, 'test_api']);
     Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::post('update-profile', [ProfileController::class, 'update_profile']);
 });
