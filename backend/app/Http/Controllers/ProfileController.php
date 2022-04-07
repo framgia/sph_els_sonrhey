@@ -11,7 +11,7 @@ use Storage;
 class ProfileController extends Controller
 {
     private $response;
-    public function __construct(){
+    public function __construct() {
         $this->response = new Response();
     }
 
@@ -19,7 +19,7 @@ class ProfileController extends Controller
         $fields = json_decode($request->fields);
 
         $user = User::find($request->user_id);
-        foreach($fields as $field){
+        foreach ($fields as $field) {
             if ($field->is_edited) {
                 if ($field->name === "full_name") {
                     $user->full_name = $field->full_name;
@@ -28,7 +28,7 @@ class ProfileController extends Controller
                 } else if ($field->name === "password") {
                     if (Hash::check($field->old_password, $user->password)) {
                         $user->password = bcrypt($field->new_password);
-                    }else {
+                    } else {
                         $this->response->status_code = 0;
                         $this->response->message = "error";
                         $this->response->data = "Incorrect Old password";
