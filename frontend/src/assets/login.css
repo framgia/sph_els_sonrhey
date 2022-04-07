@@ -10,13 +10,17 @@
   vertical-align: middle;
 }
 
-.login-card {
+.login-card, .signup-card {
   background: #2d3748 !important;
   color: white;
   margin: auto;
   width: 24rem;
   border-radius: 1em !important;
   padding: 10px;
+}
+
+.signup-card {
+  width: 40rem;
 }
 
 .login-svg {

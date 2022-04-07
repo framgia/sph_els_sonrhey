@@ -15,7 +15,7 @@
       <a href="#" class="text-muted">Forgot Password?</a>
     </div>
     <div class="d-grid mb-3 text-center">
-      <span class="text-muted">New here? <a href="#">Sign up</a></span>
+      <span class="text-muted">New here? <router-link to="/signup">Sign up</router-link></span>
     </div>
   </form>
 </template>
