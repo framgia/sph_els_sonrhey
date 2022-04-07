@@ -8,6 +8,7 @@ use App\Models\ViewModels\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Storage;
 
 class AuthController extends Controller
 {
@@ -61,10 +62,18 @@ class AuthController extends Controller
     }
 
     public function register(Request $request){
+        $image = $request->file('image');
+        $disk = Storage::disk('s3');
+        $uploaded_image = $disk->put($image, $image);
+        $str = str_replace('\\', '/', $uploaded_image);
+        $url = $disk->url($str);
+        $file_name = env('AWS_BUCKET').".".$url;
+
         $user = User::create([
             'full_name' => $request->full_name,
             'email_address' => $request->email_address,
             'password' => Hash::make($request->password),
+            'avatar' => $file_name
         ]);
         $token = $user->createToken("token");
         $this->response->status_code = 1;

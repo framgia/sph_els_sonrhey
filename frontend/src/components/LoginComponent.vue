@@ -2,14 +2,17 @@
   <form @submit.prevent="submit">
     <div class="mt-2 mb-3">
       <label class="mb-3">Email Address</label>
-      <input type="text" class="form-control form-control-lg" placeholder="your@email.com">
+      <input type="text" class="form-control form-control-lg" placeholder="your@email.com" v-model="email">
     </div>
     <div class="mb-4">
       <label class="mb-3">Password</label>
-      <input type="password" class="form-control form-control-lg" placeholder="Enter your Password">
+      <input type="password" class="form-control form-control-lg" placeholder="Enter your Password" v-model="password">
     </div>
     <div class="d-grid mb-4">
-      <button type="submit" class="btn btn-primary btn-lg">Login</button>
+      <button type="submit" class="btn btn-primary btn-lg" :disabled="isLoading">
+        <span v-if="isLoading">Logging in ...</span>
+        <span v-else>Login</span>
+      </button>
     </div>
     <div class="d-grid mb-3 text-center">
       <a href="#" class="text-muted">Forgot Password?</a>
@@ -21,8 +24,41 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import commonService from '../composables/commonService'
+
 export default {
-  name: 'LoginComponent'
+  name: 'LoginComponent',
+  setup(){
+    const csvc = commonService()
+    const router = useRouter()
+    const email = ref("")
+    const password = ref("")
+    const isLoading = ref(false)
+
+    const submit = async () => {
+      isLoading.value = true
+
+      const formSubmit = {
+        "email_address" : email.value,
+        "password" : password.value
+      }
+
+      const submitRequest = await axios.post('http://localhost/api/login', formSubmit)
+      const response = await submitRequest.data
+
+      if ( response.status_code == 1 ) {
+          csvc.setUserAndToken(response.data.user, response.data.token)
+          router.push({ path : '/dashboard' })
+      }
+
+      isLoading.value = false
+    }
+
+    return { email, password, submit, isLoading }
+  }
 }
 </script>
 
