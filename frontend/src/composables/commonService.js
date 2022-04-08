@@ -5,6 +5,10 @@ const setterAndGetter = () => {
     localStorage.setItem('isAuthenticated', true)
   }
 
+  const updateUser = (user) => {
+    localStorage.setItem('user', JSON.stringify(user))
+  }
+
   const getUserAndToken = (option) => {
     return localStorage.getItem(option)
   }
@@ -13,7 +17,7 @@ const setterAndGetter = () => {
     return localStorage.clear()
   }
 
-  return { setUserAndToken, getUserAndToken, removeUserAndToken }
+  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser }
 }
 
 export default setterAndGetter

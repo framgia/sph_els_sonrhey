@@ -7,6 +7,7 @@ use App\Models\ViewModels\Response;
 use App\Models\User;
 use Hash;
 use Storage;
+use Auth;
 
 class ProfileController extends Controller
 {
@@ -18,7 +19,7 @@ class ProfileController extends Controller
     public function update_profile(Request $request){
         $fields = json_decode($request->fields);
 
-        $user = User::find($request->user_id);
+        $user = Auth::user();
         foreach ($fields as $field) {
             if ($field->is_edited) {
                 if ($field->name === "full_name") {
