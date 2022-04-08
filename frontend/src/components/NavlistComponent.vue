@@ -1,6 +1,6 @@
 <template>
 <div class="container-fluid">
-  <a class="navbar-brand" href="#">E - Learning</a>
+  <router-link class="navbar-brand" to="/dashboard">E - Learning</router-link>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>
@@ -17,7 +17,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-              <li><a class="dropdown-item" href="#" @click="logout">Settings</a></li>
+              <li><router-link class="dropdown-item" to="/profile">Profile</router-link></li>
               <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
             </ul>
           </li>
