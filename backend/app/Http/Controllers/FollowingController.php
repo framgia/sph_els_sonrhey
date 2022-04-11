@@ -26,11 +26,12 @@ class FollowingController extends Controller
     }
 
     public function follow_user(Request $request) {
-        try{
+        try {
             $my_id = Auth::user()->user_id;
 
             $user_relationship = new UserRelationshipModel();
             $user_relationship->following_id = $request->following_id;
+            $user_relationship->followed_id = $my_id;
             $user_relationship->save();
 
             $this->response->status_code = 1;
