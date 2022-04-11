@@ -15,4 +15,12 @@ class UserRelationshipModel extends Model
         'following_id',
         'followed_id'
     ];
+
+    public function following() {
+        return $this->belongsTo(User::class, 'following_id', 'user_id');
+    }
+
+    public function followed_back() {
+        return $this->belongsTo(User::class, 'followed_id', 'user_id');
+    }
 }
