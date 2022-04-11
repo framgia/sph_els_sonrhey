@@ -1,20 +1,20 @@
 <template>
-  <div class="modal" tabindex="-1" id="category">
+  <div class="modal" tabindex="-1" id="edit_category">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form @submit.prevent="create_category">
+        <form @submit.prevent="edit_category">
           <div class="modal-header">
-            <h5 class="modal-title">Create Category</h5>
+            <h5 class="modal-title">Edit Category</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <label for="title" class="form-label">Title</label>
-              <input type="text" class="form-control form-control-lg" id="title" placeholder="Category Title" v-model="title" required>
+              <input type="text" class="form-control form-control-lg" id="title" @change="title_changed" placeholder="Category Title" v-model="category.title">
             </div>
             <div class="mb-3">
               <label for="description" class="form-label">Description</label>
-              <input type="text" class="form-control form-control-lg" id="description" placeholder="Description" v-model="description" required>
+              <input type="text" class="form-control form-control-lg" id="description" @change="name" placeholder="Description" v-model="category.name" required>
             </div>
           </div>
           <div class="modal-footer">
@@ -29,37 +29,39 @@
 
 <script>
 import axios from 'axios'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import commonService from '../../composables/commonService'
+import store from '@/store';
+import { useStore } from 'vuex';
 
 export default {
   name: 'CreateCategoryModal',
   setup() {
     const csvc = commonService()
-    const title = ref('')
-    const description = ref('')
+    const category = ref(computed(() => store.state.category))
 
-    const create_category = async () => {
+    const edit_category = async () => {
       const category_in = {
-        "title" : title.value,
-        "name" : description.value
+        "category_id" : category.value.category_id,
+        "title" : category.value.title,
+        "name" : category.value.name
       }
 
       try {
-        const create = await axios.post('http://localhost/api/create-category', category_in , {
+        const edit = await axios.post('http://localhost/api/edit-category', category_in , {
         headers: {
             Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }
         })
 
-        const response = await create.data.data
+        const response = await edit.data.data
         location.reload()
         
       } catch(e) {
       }
     }
 
-    return { title, description, create_category }
+    return { edit_category, category }
 
   }
 }

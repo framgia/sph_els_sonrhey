@@ -46,7 +46,6 @@ class CategoriesController extends Controller
 
         return response()->json($this->response);
     }
-
     public function get_category() {
         $get_category = CategoryModel::all();
 

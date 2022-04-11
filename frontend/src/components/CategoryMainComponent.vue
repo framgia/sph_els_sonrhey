@@ -13,10 +13,14 @@
                 <th>No</th>
                 <th>Category Title</th>
                 <th>Category Description</th>
+                <th>Status</th>
                 <th>Action</th>
               </thead>
               <tbody>
-                <CategoryListComponent />
+                <CategoryListComponent v-for="category in category_list" :category="category" :key="category.category_id" />
+                <tr v-if="!category_list.length">
+                  <td colspan="5">Data still loading ...</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -25,17 +29,44 @@
     </div>
   </div>
   <CreateCategoryModal />
+  <EditCategoryModal />
 </template>
 
 <script>
+import axios from 'axios'
+import { ref } from 'vue';
+import commonService from '../composables/commonService'
 import CategoryListComponent from '../components/CategoryListComponent.vue'
 import CreateCategoryModal from '../components/Modals/CreateCategoryModal.vue'
+import EditCategoryModal from '../components/Modals/EditCategoryModal.vue'
 
 export default {
   name: 'CategoryMainComponent',
   components: {
     CategoryListComponent,
-    CreateCategoryModal
+    CreateCategoryModal,
+    EditCategoryModal
+  },
+  setup() {
+    const csvc = commonService()
+    const category_list = ref([])
+    
+    const get_categories = async () => {
+      try {
+        const categories = await axios.get('http://localhost/api/get-category', {
+        headers: {
+            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+        }
+        })
+        const response = await categories.data.data
+        category_list.value = response
+      } catch(e) {
+      }
+    }
+
+    get_categories()
+
+    return { category_list }
   }
 }
 </script>
@@ -48,7 +79,6 @@ export default {
   background: #2d3748;
 }
 .category-list {
-  height: 15rem;
   color: white;
   vertical-align: middle;
 }
