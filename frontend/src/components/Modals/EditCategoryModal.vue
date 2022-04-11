@@ -41,23 +41,24 @@ export default {
     const category = ref(computed(() => store.state.category))
 
     const edit_category = async () => {
-      const category_in = {
+      const categoryIn = {
         "category_id" : category.value.category_id,
         "title" : category.value.title,
         "name" : category.value.name
       }
 
       try {
-        const edit = await axios.post('http://localhost/api/edit-category', category_in , {
-        headers: {
-            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
-        }
+        const edit = await axios.post('http://localhost/api/edit-category', categoryIn , {
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
         })
 
         const response = await edit.data.data
         location.reload()
         
       } catch(e) {
+        console.error(e)
       }
     }
 

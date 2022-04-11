@@ -6,8 +6,8 @@
     <td>N/A</td>
     <td>
       <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-warning" @click="edit_category(category)" data-bs-toggle="modal" data-bs-target="#edit_category"><i class="fa fa-edit"></i></button>
-        <button type="button" class="btn btn-danger" @click="delete_category(category)"><i class="fa fa-trash"></i></button>
+        <button type="button" class="btn btn-warning" @click="editCategory(category)" data-bs-toggle="modal" data-bs-target="#edit_category"><i class="fa fa-edit"></i></button>
+        <button type="button" class="btn btn-danger" @click="deleteCategory(category)"><i class="fa fa-trash"></i></button>
       </div>
     </td>
   </tr>
@@ -24,31 +24,31 @@ export default {
   setup(props) {
     const csvc = commonService()
 
-    const edit_category = (category) => {
+    const editCategory = (category) => {
       store.commit('set_category', category)
     }
     
-    const delete_category = async (category) => {
-      const category_in = {
+    const deleteCategory = async (category) => {
+      const categoryIn = {
         "category_id" : category.category_id,
       }
 
       try {
-        const delete_cat = await axios.post('http://localhost/api/delete-category', category_in , {
-        headers: {
-            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
-        }
+        const deleteCat = await axios.post('http://localhost/api/delete-category', categoryIn , {
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
         })
 
-        const response = await delete_cat.data.data
+        const response = await deleteCat.data.data
         location.reload()
         
       } catch(e) {
-        console.log(e)
+        console.error(e)
       }
     }
 
-    return { edit_category, delete_category }
+    return { editCategory, deleteCategory }
   }
 }
 </script>

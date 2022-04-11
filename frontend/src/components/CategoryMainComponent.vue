@@ -17,8 +17,8 @@
                 <th>Action</th>
               </thead>
               <tbody>
-                <CategoryListComponent v-for="category in category_list" :category="category" :key="category.category_id" />
-                <tr v-if="!category_list.length">
+                <CategoryListComponent v-for="category in categoryList" :category="category" :key="category.category_id" />
+                <tr v-if="!categoryList.length">
                   <td colspan="5">Data still loading ...</td>
                 </tr>
               </tbody>
@@ -49,24 +49,24 @@ export default {
   },
   setup() {
     const csvc = commonService()
-    const category_list = ref([])
+    const categoryList = ref([])
     
-    const get_categories = async () => {
+    const getCategories = async () => {
       try {
         const categories = await axios.get('http://localhost/api/get-category', {
-        headers: {
-            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
-        }
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
         })
         const response = await categories.data.data
-        category_list.value = response
+        categoryList.value = response
       } catch(e) {
       }
     }
 
-    get_categories()
+    getCategories()
 
-    return { category_list }
+    return { categoryList }
   }
 }
 </script>

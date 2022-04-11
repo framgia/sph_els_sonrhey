@@ -40,22 +40,23 @@ export default {
     const description = ref('')
 
     const create_category = async () => {
-      const category_in = {
+      const categoryIn = {
         "title" : title.value,
         "name" : description.value
       }
 
       try {
-        const create = await axios.post('http://localhost/api/create-category', category_in , {
-        headers: {
-            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
-        }
+        const create = await axios.post('http://localhost/api/create-category', categoryIn , {
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
         })
 
         const response = await create.data.data
         location.reload()
         
       } catch(e) {
+        console.error(e)
       }
     }
 
