@@ -8,9 +8,9 @@
           <div class="form-group mb-4">
             <input type="text" class="form-control search-user" placeholder="Search User">
           </div>
-          <div class="alert alert-success alert-dismissible fade show" :class="[ alert ? '' : 'd-none']" role="alert">
+          <div class="alert alert-success alert-dismissible fade show" :class="[ alert_button ? '' : 'd-none']" role="alert">
             <strong>Success!</strong> User is followed successfuly!
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" :data-bs-dismiss="[!hide_alert ? '' : 'alert']" @click="close_alert" aria-label="Close"></button>
           </div>
           <div class="user-list">
               <UserListComponent v-for="user in user_list" :user="user" :key="user.user_id" @show="show"/>
@@ -32,14 +32,19 @@ export default {
   components: {
     UserListComponent
   },
-  emits: ['show_alert'],
   setup() {
     const csvc = commonService()
     const user_list = ref()
-    const alert = ref(false)
+    const alert_button = ref(false)
+    const hide_alert = ref(false)
+
+    const close_alert = () => {
+      hide_alert.value = !hide_alert.value
+      alert_button.value = !alert_button.value
+    }
 
     const show = (response) => {
-      alert.value = !alert.value
+      alert_button.value = !alert_button.value
     }
 
     const get_users = async () => {
@@ -57,7 +62,7 @@ export default {
 
     get_users()
 
-    return { user_list, show, alert }
+    return { user_list, show, alert_button, close_alert, hide_alert }
   }
 }
 </script>
