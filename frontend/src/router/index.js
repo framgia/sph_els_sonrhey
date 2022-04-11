@@ -4,6 +4,7 @@ import SignupView from '../views/SignupView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import UsersView from '../views/UsersView.vue'
+import CategoryView from '../views/CategoryView.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/users',
     name: 'Users',
     component: UsersView
+  },
+  {
+    path: '/category',
+    name: 'Category',
+    component: CategoryView
   }
 ]
 
