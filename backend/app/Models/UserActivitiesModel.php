@@ -17,11 +17,11 @@ class UserActivitiesModel extends Model
         'user_id'
     ];
 
-    public function user(){
+    public function user() {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
-    public function user_relationship(){
+    public function user_relationship() {
         return $this->hasMany(UserRelationshipModel::class, 'user_relationship_id', 'user_relationship_id');
     }
 }
