@@ -140,6 +140,7 @@ export default {
         }
         errorMessage.value = response.data
       } catch(e) {
+        console.error(e)
       }
     }
     

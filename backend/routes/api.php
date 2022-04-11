@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowingController;
+use App\Http\Controllers\CategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::post('update-profile', [ProfileController::class, 'update_profile']);
+
     Route::post('follow', [FollowingController::class, 'follow_user']);
+    Route::post('follow-back', [FollowingController::class, 'follow_back']);
     Route::get('user-list', [FollowingController::class, 'user_list']);
     Route::get('user-relationships', [FollowingController::class, 'get_user_relationship']);
+
+    Route::post('create-category', [CategoriesController::class, 'create_category']);
+    Route::post('edit-category', [CategoriesController::class, 'edit_category']);
+    Route::post('delete-category', [CategoriesController::class, 'delete_category']);
+    Route::get('get-category', [CategoriesController::class, 'get_category']);
 });
