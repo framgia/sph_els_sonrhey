@@ -123,11 +123,10 @@ export default {
 
       const data = editedField(inputStatus, inputValues)
       const formData = new FormData()
-      console.log(data);
       formData.append('fields', JSON.stringify(data))
       formData.append('image', avatar.value)
 
-      try{
+      try {
         const submitRequest = await axios.post('http://localhost/api/update-profile', formData, {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
@@ -141,7 +140,6 @@ export default {
         }
         errorMessage.value = response.data
       } catch(e) {
-        console.log(e.response)
       }
     }
     

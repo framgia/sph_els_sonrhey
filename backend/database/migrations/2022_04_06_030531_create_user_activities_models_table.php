@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('user_activities', function (Blueprint $table) {
             $table->bigIncrements('user_activity_id');
-            $table->integer('user_relationship_id');
-            $table->integer('category_id');
+            $table->integer('user_relationship_id')->nullable();
+            $table->integer('category_id')->nullable();
             $table->integer('user_id');
             $table->timestamps();
         });
