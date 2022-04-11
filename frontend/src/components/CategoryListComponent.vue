@@ -25,7 +25,7 @@ export default {
     const csvc = commonService()
 
     const editCategory = (category) => {
-      store.commit('set_category', category)
+      store.commit('setCategory', category)
     }
     
     const deleteCategory = async (category) => {

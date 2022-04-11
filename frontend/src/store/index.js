@@ -7,7 +7,7 @@ export default createStore({
   getters: {
   },
   mutations: {
-    set_category(state, value) {
+    setCategory(state, value) {
       state.category = value
     }
   },

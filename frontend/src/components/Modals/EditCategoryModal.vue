@@ -2,7 +2,7 @@
   <div class="modal" tabindex="-1" id="edit_category">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form @submit.prevent="edit_category">
+        <form @submit.prevent="editCategory">
           <div class="modal-header">
             <h5 class="modal-title">Edit Category</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -40,7 +40,7 @@ export default {
     const csvc = commonService()
     const category = ref(computed(() => store.state.category))
 
-    const edit_category = async () => {
+    const editCategory = async () => {
       const categoryIn = {
         "category_id" : category.value.category_id,
         "title" : category.value.title,
@@ -62,7 +62,7 @@ export default {
       }
     }
 
-    return { edit_category, category }
+    return { editCategory, category }
 
   }
 }
