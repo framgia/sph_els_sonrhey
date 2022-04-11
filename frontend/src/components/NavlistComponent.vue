@@ -12,7 +12,7 @@
             <a class="nav-link active" aria-current="page" href="#">Categories</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Users</a>
+            <router-link class="nav-link" aria-current="page" to="/users">Users</router-link>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
