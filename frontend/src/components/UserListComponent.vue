@@ -16,8 +16,8 @@
                   <h5>{{ user.email_address }}</h5>
                 </td>
                 <td>
-                  <button class="btn btn-primary" @click="follow_user(user.user_id)" :disabled=is_follow>
-                    <span v-if="!is_follow">Follow</span>
+                  <button class="btn btn-primary" @click="follow_user(user.user_id)" :disabled=isFollow>
+                    <span v-if="!isFollow">Follow</span>
                     <span v-else>Following</span>
                   </button>
                 </td>
@@ -44,28 +44,26 @@ export default {
   },
   setup(props, context) {
     const csvc = commonService()
-    const is_follow = ref(false)
-    const is_show = ref('')
+    const isFollow = ref(false)
     
     const follow_user = async (user_id) => {
-      is_follow.value = !is_follow.value
+      isFollow.value = !isFollow.value
       try {
-        const follow_in = {
+        const followIn = {
           "following_id" : user_id
         }
-        const follow = await axios.post('http://localhost/api/follow', follow_in ,{
-        headers: {
-            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
-        }
+        const follow = await axios.post('http://localhost/api/follow', followIn ,{
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
         })
         const response = await follow.data.data
         context.emit('show', response)
-        console.log(response)
       } catch(e) {
-        console.log(e)
+        console.error(e)
       }
     }
-    return { follow_user, is_follow } 
+    return { follow_user, isFollow } 
   }
 }
 </script>

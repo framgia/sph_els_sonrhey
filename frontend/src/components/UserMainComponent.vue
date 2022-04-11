@@ -8,12 +8,12 @@
           <div class="form-group mb-4">
             <input type="text" class="form-control search-user" placeholder="Search User">
           </div>
-          <div class="alert alert-success alert-dismissible fade show" :class="[ alert_button ? '' : 'd-none']" role="alert">
+          <div class="alert alert-success alert-dismissible fade show" :class="{'d-none' : !alertButton}" role="alert">
             <strong>Success!</strong> User is followed successfuly!
-            <button type="button" class="btn-close" :data-bs-dismiss="[!hide_alert ? '' : 'alert']" @click="close_alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" :data-bs-dismiss="{'alert' : !hideAlert}" @click="close_alert" aria-label="Close"></button>
           </div>
           <div class="user-list">
-              <UserListComponent v-for="user in user_list" :user="user" :key="user.user_id" @show="show"/>
+              <UserListComponent v-for="user in userList" :user="user" :key="user.user_id" @show="show"/>
           </div>
         </div>
       </div> 
@@ -34,35 +34,36 @@ export default {
   },
   setup() {
     const csvc = commonService()
-    const user_list = ref()
-    const alert_button = ref(false)
-    const hide_alert = ref(false)
+    const userList = ref()
+    const alertButton = ref(false)
+    const hideAlert = ref(false)
 
     const close_alert = () => {
-      hide_alert.value = !hide_alert.value
-      alert_button.value = !alert_button.value
+      hideAlert.value = !hideAlert.value
+      alertButton.value = !alertButton.value
     }
 
     const show = (response) => {
-      alert_button.value = !alert_button.value
+      alertButton.value = !alertButton.value
     }
 
     const get_users = async () => {
       try {
-        const get_user_list = await axios.get('http://localhost/api/user-list', {
-        headers: {
-            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
-        }
+        const getUserList = await axios.get('http://localhost/api/user-list', {
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
         })
-        const response = await get_user_list.data.data
-        user_list.value = response
+        const response = await getUserList.data.data
+        userList.value = response
       } catch(e) {
+        console.error(e)
       }
     }
 
     get_users()
 
-    return { user_list, show, alert_button, close_alert, hide_alert }
+    return { userList, show, alertButton, close_alert, hideAlert }
   }
 }
 </script>
