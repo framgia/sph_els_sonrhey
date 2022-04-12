@@ -5,6 +5,7 @@ import DashboardView from '../views/DashboardView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import UsersView from '../views/UsersView.vue'
 import CategoryView from '../views/CategoryView.vue'
+import QuestionsView from '../views/QuestionsView.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/category',
     name: 'Category',
     component: CategoryView
+  },
+  {
+    path: '/questions',
+    name: 'Questions',
+    component: QuestionsView
   }
 ]
 
