@@ -34,6 +34,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import commonService from '../composables/commonService'
+import config from '../composables/config'
 
 export default {
   name: 'UserListComponent',
@@ -44,6 +45,7 @@ export default {
   },
   setup(props, context) {
     const csvc = commonService()
+    const { link } = config()
     const isFollow = ref(false)
     
     const follow_user = async (user_id) => {
@@ -52,7 +54,7 @@ export default {
         const followIn = {
           "following_id" : user_id
         }
-        const follow = await axios.post('http://localhost/api/follow', followIn ,{
+        const follow = await axios.post(`${link}/api/follow`, followIn ,{
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

@@ -26,6 +26,7 @@ import axios from 'axios'
 import { ref } from 'vue';
 import UserListComponent from '../components/UserListComponent.vue'
 import commonService from '../composables/commonService'
+import config from '../composables/config'
 
 export default {
   name: 'UserMainComponent',
@@ -34,6 +35,7 @@ export default {
   },
   setup() {
     const csvc = commonService()
+    const { link } = config()
     const userList = ref()
     const alertButton = ref(false)
     const hideAlert = ref(false)
@@ -49,7 +51,7 @@ export default {
 
     const get_users = async () => {
       try {
-        const getUserList = await axios.get('http://localhost/api/user-list', {
+        const getUserList = await axios.get(`${link}/api/user-list`, {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
