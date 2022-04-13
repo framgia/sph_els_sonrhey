@@ -16,7 +16,7 @@ const getQuestions = () => {
     })  
   
     const response = await questions.data.data
-    questionList.value = response.filter(q => q.category != null)
+    questionList.value = response
   }
 
   return { fetchQuestions, questionList }
