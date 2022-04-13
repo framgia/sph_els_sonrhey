@@ -16,7 +16,7 @@
                 <th>Action</th>
               </thead>
               <tbody>
-                <QuestionListComponent />
+                <QuestionListComponent v-for="question in questionList" :key="question.question_id" :question="question"/>
               </tbody>
             </table>
           </div>
@@ -25,17 +25,26 @@
     </div>
   </div>
   <CreateQuestionModal />
+  <EditQuestionModal />
 </template>
 
 <script>
 import CreateQuestionModal from '../components/Modals/CreateQuestionModal.vue'
 import QuestionListComponent from '../components/QuestionListComponent.vue'
+import getQuestions from '../composables/getQuestions'
+import EditQuestionModal from '../components/Modals/EditQuestionModal.vue'
 
 export default {
   name: 'QuestionsMainComponent',
   components: {
     CreateQuestionModal,
-    QuestionListComponent
+    QuestionListComponent,
+    EditQuestionModal
+  },
+  setup() {
+    const { fetchQuestions, questionList } = getQuestions()
+    const fetch = fetchQuestions()
+    return { questionList } 
   }
 }
 </script>

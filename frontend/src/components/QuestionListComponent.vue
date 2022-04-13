@@ -1,20 +1,55 @@
 <template>
   <tr>
-    <td>1</td>
-    <td>Bisaya</td>
-    <td>What is the "Bisaya" of Glass?</td>
+    <td>{{ question.question_id }}</td>
+    <td>{{ question.category.title }}</td>
+    <td>{{ question.description }}</td>
     <td>
       <div class="btn-group" role="group">
-        <button type="button" class="btn btn-warning"><i class="fa fa-edit"></i></button>
-        <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+        <button type="button" class="btn btn-warning" @click="editQuestion(question)" data-bs-toggle="modal" data-bs-target="#editQuestion"><i class="fa fa-edit"></i></button>
+        <button type="button" class="btn btn-danger" @click="deleteQuestion(question)"><i class="fa fa-trash"></i></button>
       </div>
     </td>
   </tr>
 </template>
 
 <script>
-export default {
+import axios from 'axios'
+import { ref } from 'vue'
+import commonService from '../composables/commonService'
+import store from '@/store'
 
+export default {
+  name: 'QuestionListComponent',
+  props: ['question'],
+  setup() {
+    const csvc = commonService()
+
+    const editQuestion = (question) => {
+      store.commit('setQuestion', question)
+    }
+    
+    const deleteQuestion = async (question) => {
+      const questionIn = {
+        "question_id" : question.question_id,
+      }
+
+      try {
+        const deleteQ = await axios.post('http://localhost/api/delete-question', questionIn , {
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
+        })
+
+        const response = await deleteQ.data.data
+        location.reload()
+        
+      } catch(e) {
+        console.error(e)
+      }
+    }
+
+    return { deleteQuestion, editQuestion }
+  }
 }
 </script>
 

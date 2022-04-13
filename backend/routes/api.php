@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FollowingController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\QuestionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('edit-category', [CategoriesController::class, 'edit_category']);
     Route::post('delete-category', [CategoriesController::class, 'delete_category']);
     Route::get('get-category', [CategoriesController::class, 'get_category']);
+
+    Route::post('create-questions', [QuestionsController::class, 'create_question']);
+    Route::get('get-questions', [QuestionsController::class, 'get_questions']);
+    Route::post('edit-question', [QuestionsController::class, 'edit_question']);
+    Route::post('delete-question', [QuestionsController::class, 'delete_question']);
 });
