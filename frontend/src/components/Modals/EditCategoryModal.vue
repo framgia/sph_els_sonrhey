@@ -33,11 +33,13 @@ import { ref, computed } from 'vue';
 import commonService from '../../composables/commonService'
 import store from '@/store';
 import { useStore } from 'vuex';
+import config from '../../composables/config'
 
 export default {
   name: 'CreateCategoryModal',
   setup() {
     const csvc = commonService()
+    const { link } = config()
     const category = ref(computed(() => store.state.category))
 
     const editCategory = async () => {
@@ -48,7 +50,7 @@ export default {
       }
 
       try {
-        const edit = await axios.post('http://localhost/api/edit-category', categoryIn , {
+        const edit = await axios.post(`${link}/api/edit-category`, categoryIn , {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

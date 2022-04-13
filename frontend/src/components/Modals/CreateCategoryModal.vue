@@ -31,11 +31,13 @@
 import axios from 'axios'
 import { ref } from 'vue';
 import commonService from '../../composables/commonService'
+import config from '../../composables/config'
 
 export default {
   name: 'CreateCategoryModal',
   setup() {
     const csvc = commonService()
+    const { link } = config()
     const title = ref('')
     const description = ref('')
 
@@ -46,7 +48,7 @@ export default {
       }
 
       try {
-        const create = await axios.post('http://localhost/api/create-category', categoryIn , {
+        const create = await axios.post(`${link}/api/create-category`, categoryIn , {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

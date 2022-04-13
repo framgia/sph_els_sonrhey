@@ -17,12 +17,14 @@
 import axios from 'axios'
 import store from '@/store'
 import commonService from '../composables/commonService'
+import config from '../composables/config'
 
 export default {
   name: 'CategoryListComponent',
   props: ['category'],
   setup(props) {
     const csvc = commonService()
+    const { link } = config()
 
     const editCategory = (category) => {
       store.commit('setCategory', category)
@@ -34,7 +36,7 @@ export default {
       }
 
       try {
-        const deleteCat = await axios.post('http://localhost/api/delete-category', categoryIn , {
+        const deleteCat = await axios.post(`${link}/api/delete-category`, categoryIn , {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
