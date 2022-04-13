@@ -9,6 +9,9 @@
       <div class="d-flex">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/lessons">Lessons</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/category">Categories</a>
           </li>
           <li class="nav-item">
@@ -31,8 +34,22 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
+import commonService from '../composables/commonService'
+
 export default {
-  name: 'Navlist'
+  name: 'Navlist',
+  setup() {
+    const router = useRouter()
+    const csvc = commonService()
+
+    const logout = () => {
+      csvc.removeUserAndToken()
+      router.push('/')
+    }
+
+    return { logout }
+  }
 }
 </script>
 

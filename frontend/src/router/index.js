@@ -6,6 +6,8 @@ import ProfileView from '../views/ProfileView.vue'
 import UsersView from '../views/UsersView.vue'
 import CategoryView from '../views/CategoryView.vue'
 import QuestionsView from '../views/QuestionsView.vue'
+import LessonsView from '../views/LessonsView.vue'
+import AnswersView from '../views/AnswersView.vue'
 
 const routes = [
   {
@@ -42,6 +44,16 @@ const routes = [
     path: '/questions',
     name: 'Questions',
     component: QuestionsView
+  },
+  {
+    path: '/lessons',
+    name: 'Lessons',
+    component: LessonsView
+  },
+  {
+    path: '/answer',
+    name: 'Answer',
+    component: AnswersView
   }
 ]
 
