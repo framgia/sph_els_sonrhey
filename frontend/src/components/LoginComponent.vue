@@ -28,12 +28,14 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import commonService from '../composables/commonService'
+import config from '../composables/config'
 
 export default {
   name: 'LoginComponent',
   setup() {
     const csvc = commonService()
     const router = useRouter()
+    const { link } = config()
     const email = ref("")
     const password = ref("")
     const isLoading = ref(false)
@@ -46,7 +48,7 @@ export default {
         "password" : password.value
       }
 
-      const submitRequest = await axios.post('http://localhost/api/login', formSubmit)
+      const submitRequest = await axios.post(`${link}/api/login`, formSubmit)
       const response = await submitRequest.data
 
       if (response.status_code === 1) {

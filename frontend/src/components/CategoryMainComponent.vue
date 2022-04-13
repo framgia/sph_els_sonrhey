@@ -39,6 +39,7 @@ import commonService from '../composables/commonService'
 import CategoryListComponent from '../components/CategoryListComponent.vue'
 import CreateCategoryModal from '../components/Modals/CreateCategoryModal.vue'
 import EditCategoryModal from '../components/Modals/EditCategoryModal.vue'
+import config from '../composables/config'
 
 export default {
   name: 'CategoryMainComponent',
@@ -50,10 +51,11 @@ export default {
   setup() {
     const csvc = commonService()
     const categoryList = ref([])
+    const { link } = config()
     
     const getCategories = async () => {
       try {
-        const categories = await axios.get('http://localhost/api/get-category', {
+        const categories = await axios.get(`${link}/api/get-category`, {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

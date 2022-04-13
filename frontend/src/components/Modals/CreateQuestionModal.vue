@@ -61,6 +61,7 @@ import axios from 'axios'
 import { ref } from '@vue/reactivity'
 import commonService from '../../composables/commonService'
 import getCategory from '../../composables/getCategory'
+import config from '../../composables/config'
 
 export default {
   name: 'CreateQuestionModal',
@@ -72,6 +73,7 @@ export default {
   },
   setup() {
     const csvc = commonService()
+    const { link } = config()
     const { categoriesList, fetchCategory } = getCategory()
     const questionFields = ref({
       category_id : '',
@@ -116,7 +118,7 @@ export default {
       }
 
       try {
-        const create = await axios.post('http://localhost/api/create-questions', questionsIn , {
+        const create = await axios.post(`${link}/api/create-questions`, questionsIn , {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

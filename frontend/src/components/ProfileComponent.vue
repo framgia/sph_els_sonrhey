@@ -67,12 +67,14 @@ import { ref } from 'vue';
 import commonService from '../composables/commonService'
 import editedField from '../composables/editedFields'
 import profileService from '../composables/profileService'
+import config from '../composables/config'
 
 export default {
   name: 'ProfileComponent',
   setup() {
     const csvc = commonService()
     const psvc = profileService()
+    const { link } = config()
 
     const inputsState = ref(true)
     const editPassword = ref(false)
@@ -127,7 +129,7 @@ export default {
       formData.append('image', avatar.value)
 
       try {
-        const submitRequest = await axios.post('http://localhost/api/update-profile', formData, {
+        const submitRequest = await axios.post(`${link}/api/update-profile`, formData, {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

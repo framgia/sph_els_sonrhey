@@ -48,6 +48,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import commonService from '../composables/commonService'
 import getHeaders from '../composables/headers'
+import config from '../composables/config'
 
 export default {
   name: 'SignupComponent',
@@ -55,6 +56,7 @@ export default {
     const csvc = commonService()
     const headers = getHeaders()
     const router = useRouter()
+    const { link } = config()
     const full_name = ref("")
     const email_address = ref("")
     const password = ref("")
@@ -72,7 +74,7 @@ export default {
       formData.append('password', password.value)
       formData.append('image', image.value)
 
-      const submitRequest = await axios.post('http://localhost/api/register', formData, headers)
+      const submitRequest = await axios.post(`${link}/api/register`, formData, headers)
       const response = await submitRequest.data
       if (response.status_code === 1) {
           csvc.setUserAndToken(response.data.user, response.data.token)
