@@ -14,4 +14,8 @@ class AnswerModel extends Model
     protected $fillable = [
         'choice_id'
     ];
+
+    public function choice() {
+        return $this->belongsTo(ChoiceModel::class, 'choice_id', 'choice_id');
+    }
 }

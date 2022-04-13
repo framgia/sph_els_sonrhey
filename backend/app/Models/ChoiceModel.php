@@ -16,5 +16,4 @@ class ChoiceModel extends Model
         'letter',
         'description'
     ];
-
 }

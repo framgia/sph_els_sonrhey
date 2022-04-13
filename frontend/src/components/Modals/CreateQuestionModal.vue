@@ -10,9 +10,9 @@
           <div class="modal-body">
             <div class="mb-3">
               <label for="title" class="form-label">Category</label>
-              <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+              <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" @change="selectCategory">
                 <option selected>Select Category</option>
-                <option>Bisaya</option>
+                <option v-for="category in categoriesList" :key="category.category_id" :value="category.category_id">{{ category.title }}</option>
               </select>
             </div>
             <div class="mb-3">
@@ -57,7 +57,11 @@
 </template>
 
 <script>
+import axios from 'axios'
 import { ref } from '@vue/reactivity'
+import commonService from '../../composables/commonService'
+import getCategory from '../../composables/getCategory'
+
 export default {
   name: 'CreateQuestionModal',
   computed: {
@@ -67,9 +71,10 @@ export default {
     }
   },
   setup() {
-    const categoryList = ref()
-    const answerList = ref()
+    const csvc = commonService()
+    const { categoriesList, fetchCategory } = getCategory()
     const questionFields = ref({
+      category_id : '',
       question : '',
       choices: [
         {
@@ -92,20 +97,40 @@ export default {
       answer: ''
     })
 
+    const fetch = fetchCategory()
+    
+    const selectCategory = (e) => {
+      questionFields.value.category_id = e.target.value
+    }
+
     const selectAnswer = (e) => {
       questionFields.value.answer = e.target.value
     }
 
     const submitQuestion = async () => {
       const questionsIn = {
-        "category_id" : categoryList.category_id,
-        "question" : questionFields.value.question,
-        "choices" : questionFields.value.choices,
-        "answer" : questionFields.value.answer
+        "category_id" : questionFields.value.category_id,
+        "description" : questionFields.value.question,
+        "answer" : questionFields.value.answer,
+        "choices" : questionFields.value.choices
+      }
+
+      try {
+        const create = await axios.post('http://localhost/api/create-questions', questionsIn , {
+          headers: {
+              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
+        })
+
+        const response = await create.data.data
+        location.reload()
+        
+      } catch(e) {
+        console.error(e)
       }
     }
 
-    return { questionFields, submitQuestion, selectAnswer }
+    return { questionFields, submitQuestion, selectAnswer, categoriesList, selectCategory }
   }
 }
 </script>
