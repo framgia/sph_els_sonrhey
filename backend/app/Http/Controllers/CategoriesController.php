@@ -46,12 +46,23 @@ class CategoriesController extends Controller
 
         return response()->json($this->response);
     }
+
     public function get_category() {
         $get_category = CategoryModel::all();
 
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = $get_category;
+
+        return response()->json($this->response);
+    }
+
+    public function get_category_with_questions() {
+        $get_categories = CategoryModel::with('questions', 'questions.choices')->get();
+
+        $this->response->status_code = 1;
+        $this->response->message = "success";
+        $this->response->data = $get_categories;
 
         return response()->json($this->response);
     }

@@ -11,10 +11,10 @@
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="/lessons">Lessons</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="isAdmin">
             <a class="nav-link" aria-current="page" href="/category">Categories</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="isAdmin">
             <a class="nav-link" aria-current="page" href="/questions">Questions</a>
           </li>
           <li class="nav-item">
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router'
 import commonService from '../composables/commonService'
 
@@ -42,13 +43,19 @@ export default {
   setup() {
     const router = useRouter()
     const csvc = commonService()
-
+    const user = JSON.parse(csvc.getUserAndToken('user'))
+    const isAdmin = ref(computed(() => {
+      if (user.role.code === 'SA') {
+        return true
+      }
+        return false
+    }))
     const logout = () => {
       csvc.removeUserAndToken()
       router.push('/')
     }
 
-    return { logout }
+    return { logout, user, isAdmin }
   }
 }
 </script>

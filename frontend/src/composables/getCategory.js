@@ -8,6 +8,7 @@ const getCategory = () => {
   const csvc = commonService()
   const { link } = config()
   const categoriesList = ref()
+  const categoriesWithQuestion = ref([])
 
   const fetchCategory = async () => {
     const categories = await axios.get(`${link}/api/get-category`, {
@@ -31,7 +32,18 @@ const getCategory = () => {
     }
   }
 
-  return { fetchCategory, categoriesList, selectedCategory }
+  const getCategoryWithQuestions = async () => {
+    const categories = await axios.get(`${link}/api/get-category-with-questions`, {
+      headers: {
+          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+      }
+    })
+  
+    const response = await categories.data.data
+    categoriesWithQuestion.value = response
+  }
+
+  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion }
 }
 
 export default getCategory

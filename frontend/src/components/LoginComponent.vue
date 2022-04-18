@@ -34,7 +34,6 @@ export default {
   name: 'LoginComponent',
   setup() {
     const csvc = commonService()
-    const { link } = config()
     const router = useRouter()
     const { link } = config()
     const email = ref("")

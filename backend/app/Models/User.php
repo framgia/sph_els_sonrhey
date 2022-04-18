@@ -35,6 +35,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function role() {
+        return $this->belongsTo(RoleModel::class, 'role_id', 'role_id');
+    }
+
     /**
      * The attributes that should be cast.
      *

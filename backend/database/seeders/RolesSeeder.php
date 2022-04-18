@@ -17,12 +17,12 @@ class RolesSeeder extends Seeder
     {
         RoleModel::insert([
             [
-                'code' => 'SA',
-                'name' => 'Super Admin'
-            ],
-            [
                 'code' => 'STD',
                 'name' => 'Student'
+            ],
+            [
+                'code' => 'SA',
+                'name' => 'Super Admin'
             ]
         ]);
         //

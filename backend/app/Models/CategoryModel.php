@@ -15,4 +15,8 @@ class CategoryModel extends Model
         'title',
         'name'
     ];
+
+    public function questions() {
+        return $this->hasMany(QuestionModel::class, 'category_id', 'category_id');
+    }
 }

@@ -3,7 +3,7 @@
     <div class="card shadow lesson-card">
       <div class="card-body" style="padding: 1.5rem;">
         <div class="lesson-list">
-          <LessonsListComponent />
+          <LessonsListComponent v-for="category in categories" :key="category.category_id" :category="category" />
         </div>
       </div> 
     </div>
@@ -12,10 +12,19 @@
 
 <script>
 import LessonsListComponent from '../components/LessonsListComponent.vue'
+import getCategory from '../composables/getCategory'
+
 export default {
   name: 'LessonsMainComponent',
   components: {
     LessonsListComponent
+  },
+  setup() {
+    const { getCategoryWithQuestions, categoriesWithQuestion } = getCategory()
+    const getCategories = getCategoryWithQuestions()
+    const categories = categoriesWithQuestion
+    
+    return { categories }
   }
 }
 </script>
