@@ -16,6 +16,7 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import commonService from '../composables/commonService'
+import config from '../composables/config'
 import store from '@/store'
 
 export default {
@@ -23,6 +24,7 @@ export default {
   props: ['question'],
   setup() {
     const csvc = commonService()
+    const { link } = config()
 
     const editQuestion = (question) => {
       store.commit('setQuestion', question)
@@ -34,7 +36,7 @@ export default {
       }
 
       try {
-        const deleteQ = await axios.post('http://localhost/api/delete-question', questionIn , {
+        const deleteQ = await axios.post(`${link}/api/delete-question`, questionIn , {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

@@ -75,6 +75,7 @@ export default {
     const csvc = commonService()
     const { link } = config()
     const psvc = profileService()
+    const { link } = config()
 
     const inputsState = ref(true)
     const editPassword = ref(false)

@@ -47,6 +47,7 @@ export default {
     const csvc = commonService()
     const { link } = config()
     const isFollow = ref(false)
+    const { link } = config()
     
     const follow_user = async (user_id) => {
       isFollow.value = !isFollow.value

@@ -1,15 +1,17 @@
 <template>
   <NavbarComponent />
-  <h1 class="text-center">Welcome to your Dashboard</h1>
+  <LessonsMainComponent />
 </template>
 
 <script>
 import NavbarComponent from '../components/NavbarComponent.vue'
+import LessonsMainComponent from '../components/LessonsMainComponent.vue'
 
 export default {
-  name: 'DashboardView',
+  name: 'LessonsView',
   components: {
-    NavbarComponent
+    NavbarComponent,
+    LessonsMainComponent
   }
 }
 </script>

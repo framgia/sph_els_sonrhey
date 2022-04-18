@@ -50,12 +50,14 @@ import getCategory from '../../composables/getCategory'
 import getAnswer from '../../composables/getAnswer'
 import store from '@/store'
 import { ref, computed } from 'vue';
+import config from '../../composables/config'
 
 export default {
   name: 'EditQuestionModal',
   setup() {
     const csvc = commonService()
     const { answer } = getAnswer()
+    const { link } = config()
     const { categoriesList, fetchCategory, selectedCategory } = getCategory()
     let newCategoryId = ref()
     let newChoiceId = ref()
@@ -86,7 +88,7 @@ export default {
       }
 
       try {
-        const create = await axios.post('http://localhost/api/edit-question', questionsIn , {
+        const create = await axios.post(`${link}/api/edit-question`, questionsIn , {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }

@@ -52,6 +52,7 @@ export default {
     const csvc = commonService()
     const { link } = config()
     const categoryList = ref([])
+    const { link } = config()
     
     const getCategories = async () => {
       try {
