@@ -36,6 +36,7 @@ export default {
     const csvc = commonService()
     const { link } = config()
     const router = useRouter()
+    const { link } = config()
     const email = ref("")
     const password = ref("")
     const isLoading = ref(false)

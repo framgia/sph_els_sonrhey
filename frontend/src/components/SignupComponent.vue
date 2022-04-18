@@ -57,6 +57,7 @@ export default {
     const { link } = config()
     const headers = getHeaders()
     const router = useRouter()
+    const { link } = config()
     const full_name = ref("")
     const email_address = ref("")
     const password = ref("")
