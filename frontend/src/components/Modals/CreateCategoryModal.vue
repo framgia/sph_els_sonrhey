@@ -18,8 +18,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
           </div>
         </form>
       </div>
@@ -35,13 +34,15 @@ import config from '../../composables/config'
 
 export default {
   name: 'CreateCategoryModal',
-  setup() {
+  setup(props, context) {
     const csvc = commonService()
     const { link } = config()
     const title = ref('')
     const description = ref('')
 
     const create_category = async () => {
+      context.emit('actionLoader', true)
+
       const categoryIn = {
         "title" : title.value,
         "name" : description.value
@@ -55,8 +56,12 @@ export default {
         })
 
         const response = await create.data.data
-        location.reload()
-        
+        context.emit('actionLoader', false)
+        csvc.message({
+          title: "Success!",
+          text: "Category Created Successfuly.",
+          icon: 'success'
+        })
       } catch(e) {
         console.error(e)
       }

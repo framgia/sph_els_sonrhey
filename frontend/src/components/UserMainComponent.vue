@@ -46,7 +46,7 @@ export default {
     }
 
     const show = (response) => {
-      alertButton.value = !alertButton.value
+      alertButton.value = true
     }
 
     const get_users = async () => {

@@ -17,7 +17,7 @@
                 <th>Action</th>
               </thead>
               <tbody>
-                <CategoryListComponent v-for="category in categoryList" :category="category" :key="category.category_id" />
+                <CategoryListComponent v-for="category in categoryList" :category="category" :key="category.category_id" @actionLoader="actionLoader"/>
                 <tr v-if="!categoryList.length">
                   <td colspan="5">Data still loading ...</td>
                 </tr>
@@ -28,8 +28,9 @@
       </div> 
     </div>
   </div>
-  <CreateCategoryModal />
-  <EditCategoryModal />
+  <CreateCategoryModal @actionLoader="actionLoader"/>
+  <EditCategoryModal @actionLoader="actionLoader"/>
+  <Loader :class="{'d-none' : !isShowLoading}"/>
 </template>
 
 <script>
@@ -40,19 +41,30 @@ import CategoryListComponent from '../components/CategoryListComponent.vue'
 import CreateCategoryModal from '../components/Modals/CreateCategoryModal.vue'
 import EditCategoryModal from '../components/Modals/EditCategoryModal.vue'
 import config from '../composables/config'
+import Loader from '../components/LoadingComponent.vue'
 
 export default {
   name: 'CategoryMainComponent',
   components: {
     CategoryListComponent,
     CreateCategoryModal,
-    EditCategoryModal
+    EditCategoryModal,
+    Loader
   },
   setup() {
+    const isShowLoading = ref(false)
     const csvc = commonService()
     const categoryList = ref([])
     const { link } = config()
     
+    const actionLoader = () => {
+      isShowLoading.value = !isShowLoading.value
+      if (!isShowLoading.value) {
+        getCategories()
+        return
+      }
+    }
+
     const getCategories = async () => {
       try {
         const categories = await axios.get(`${link}/api/get-category`, {
@@ -63,12 +75,13 @@ export default {
         const response = await categories.data.data
         categoryList.value = response
       } catch(e) {
+        console.error(e)
       }
     }
 
     getCategories()
 
-    return { categoryList }
+    return { categoryList, isShowLoading, actionLoader }
   }
 }
 </script>

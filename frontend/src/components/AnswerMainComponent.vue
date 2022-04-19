@@ -3,6 +3,7 @@
   <div class="mt-4 text-center position">
     <button class="btn btn-primary center-block btn-lg" type="button" @click="submitAnswer">Submit</button>
   </div>
+  <Loader :class="{'d-none' : !isShowLoading}"/>
 </template>
 
 <script>
@@ -12,19 +13,31 @@ import { ref } from 'vue'
 import AnswerListComponent from '../components/AnswerListComponent.vue'
 import commonService from '../composables/commonService'
 import config from '../composables/config'
+import Loader from '../components/LoadingComponent.vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'AnswerMainComponent',
   components: {
-    AnswerListComponent
+    AnswerListComponent,
+    Loader
   },
   setup() {
-    const { getTempStore, getUserAndToken } = commonService()
+    const { getTempStore, getUserAndToken, message } = commonService()
     const { link } = config()
+    const router = useRouter()
     const questions = ref(JSON.parse(getTempStore('category')).questions)
     const answerValues = ref([])
     const categoryId = ref()
     const questionId = ref()
+    const isShowLoading = ref(false)
+
+    const actionLoader = () => {
+      isShowLoading.value = !isShowLoading.value
+      if (!isShowLoading.value) {
+        return
+      }
+    }
 
     const answer = (answer) => {
       categoryId.value = answer.category_id
@@ -49,6 +62,7 @@ export default {
     }
 
     const submitAnswer = async () => {
+      actionLoader()
       try {
         const submitRequest = {
             category_id : categoryId.value,
@@ -62,12 +76,18 @@ export default {
           }
         })
         const response = await answerData.data.data
-        location.reload()
+        actionLoader()
+        message({
+          title: "Success!",
+          text: "Answer Submitted Successfuly.",
+          icon: 'success'
+        })
+        router.push({ path: '/lessons' })
       } catch(e) {
         console.error(e)
       }
     }
-    return { questions, submitAnswer, answer }
+    return { questions, submitAnswer, answer, isShowLoading, actionLoader }
   }
 }
 </script>

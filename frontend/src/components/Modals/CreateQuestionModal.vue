@@ -47,8 +47,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
           </div>
         </form>
       </div>
@@ -71,7 +70,7 @@ export default {
       return choices
     }
   },
-  setup() {
+  setup(props, context) {
     const csvc = commonService()
     const { link } = config()
     const { categoriesList, fetchCategory } = getCategory()
@@ -110,6 +109,7 @@ export default {
     }
 
     const submitQuestion = async () => {
+      context.emit('actionLoader', true)
       const questionsIn = {
         "category_id" : questionFields.value.category_id,
         "description" : questionFields.value.question,
@@ -125,8 +125,12 @@ export default {
         })
 
         const response = await create.data.data
-        location.reload()
-        
+        context.emit('actionLoader', true)
+        csvc.message({
+          title: "Success!",
+          text: "Question Created Successfuly.",
+          icon: 'success'
+        })
       } catch(e) {
         console.error(e)
       }

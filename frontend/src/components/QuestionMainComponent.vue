@@ -16,7 +16,7 @@
                 <th>Action</th>
               </thead>
               <tbody>
-                <QuestionListComponent v-for="question in questionList" :key="question.question_id" :question="question"/>
+                <QuestionListComponent v-for="question in questionList" :key="question.question_id" :question="question" @actionLoader="actionLoader" />
               </tbody>
             </table>
           </div>
@@ -24,8 +24,9 @@
       </div> 
     </div>
   </div>
-  <CreateQuestionModal />
-  <EditQuestionModal />
+  <CreateQuestionModal @actionLoader="actionLoader" />
+  <EditQuestionModal @actionLoader="actionLoader" />
+  <Loader :class="{'d-none' : !isShowLoading}"/>
 </template>
 
 <script>
@@ -33,18 +34,31 @@ import CreateQuestionModal from '../components/Modals/CreateQuestionModal.vue'
 import QuestionListComponent from '../components/QuestionListComponent.vue'
 import getQuestions from '../composables/getQuestions'
 import EditQuestionModal from '../components/Modals/EditQuestionModal.vue'
+import Loader from '../components/LoadingComponent.vue'
+import { ref } from 'vue'
 
 export default {
   name: 'QuestionsMainComponent',
   components: {
     CreateQuestionModal,
     QuestionListComponent,
-    EditQuestionModal
+    EditQuestionModal,
+    Loader
   },
   setup() {
+    const isShowLoading = ref(false)
     const { fetchQuestions, questionList } = getQuestions()
+
+    const actionLoader = () => {
+      isShowLoading.value = !isShowLoading.value
+      if (!isShowLoading.value) {
+        fetchQuestions()
+        return
+      }
+    }
+
     const fetch = fetchQuestions()
-    return { questionList } 
+    return { questionList, isShowLoading, actionLoader } 
   }
 }
 </script>

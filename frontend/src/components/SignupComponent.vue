@@ -31,10 +31,13 @@
     </div>
     <div class="mb-4">
       <label for="formFile" class="form-label">Upload Avatar</label>
-      <input class="form-control" type="file" id="formFile" :onChange="pickImage">
+      <input class="form-control" type="file" id="formFile" :onChange="pickImage" required>
     </div>
     <div class="d-grid mb-4">
-      <button type="submit" class="btn btn-primary btn-lg">Register Now</button>
+      <button type="submit" class="btn btn-primary btn-lg" :disabled="password !== c_password || isProcess">
+        <span v-if="!isProcess">Register Now</span>
+        <span v-else>Registering</span>
+      </button>
     </div>
     <div class="d-grid mb-3 text-center">
       <span class="text-muted">Already have an account? <router-link to="/">Login</router-link></span>
@@ -62,12 +65,14 @@ export default {
     const password = ref("")
     const c_password = ref("")
     const image = ref("")
+    const isProcess = ref(false)
 
     const pickImage = async(e) => {
       image.value = e.target.files[0]
     }
 
     const submit = async() => {
+      isProcess.value = true
       const formData = new FormData();
       formData.append('full_name', full_name.value)
       formData.append('email_address', email_address.value)
@@ -78,11 +83,11 @@ export default {
       const response = await submitRequest.data
       if (response.status_code === 1) {
           csvc.setUserAndToken(response.data.user, response.data.token)
-          router.push({ path : '/dashboard' })
+          router.push({ path : '/account-created' })
       }
     }
 
-    return { full_name, email_address, password, c_password, image, submit, pickImage }
+    return { full_name, email_address, password, c_password, image, submit, pickImage, isProcess }
   }
 }
 </script>

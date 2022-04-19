@@ -38,11 +38,7 @@ import config from '../composables/config'
 
 export default {
   name: 'UserListComponent',
-  props: {
-    user : {
-      required: true
-    }
-  },
+  props: ['user'],
   setup(props, context) {
     const csvc = commonService()
     const isFollow = ref(false)

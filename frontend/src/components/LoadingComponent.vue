@@ -1,20 +1,21 @@
 <template>
-<div class="loader">
-  <div class="main-wrapper">
-    <div class="sub-wrapper">
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  <loading v-model:active="isLoading" />
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import { ref } from 'vue'
+
 export default {
-  name: 'Loader'
+  name: 'Loader',
+  components: {
+    Loading
+  },
+  setup() {
+    const isLoading = ref(true)
+    return { isLoading }
+  }
 }
 </script>
 

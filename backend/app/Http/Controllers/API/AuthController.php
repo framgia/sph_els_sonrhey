@@ -54,8 +54,7 @@ class AuthController extends Controller
             return response()->json($this->response);
         }else{
             $this->response->status_code = 0;
-            $this->response->message = "error";
-            $this->response->data = "Error Logging In";
+            $this->response->message = "Incorrect login credentials.";
 
             return response()->json($this->response);
         }
