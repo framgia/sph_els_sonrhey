@@ -54,7 +54,6 @@ export default {
   name: 'SignupComponent',
   setup() {
     const csvc = commonService()
-    const { link } = config()
     const headers = getHeaders()
     const router = useRouter()
     const { link } = config()

@@ -47,7 +47,7 @@ class AuthController extends Controller
             $this->response->status_code = 1;
             $this->response->message = "success";
             $this->response->data = [
-                "user" => $user,
+                "user" => User::with('role')->where('user_id', $user->user_id)->first(),
                 "token" => $token->plainTextToken
             ];
 
@@ -79,7 +79,7 @@ class AuthController extends Controller
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = [
-            "user" => $user,
+            "user" => User::with('role')->where('user_id', $user->user_id)->first(),
             "token" => $token->plainTextToken
         ];
         

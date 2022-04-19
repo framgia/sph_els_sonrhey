@@ -50,7 +50,6 @@ export default {
   },
   setup() {
     const csvc = commonService()
-    const { link } = config()
     const categoryList = ref([])
     const { link } = config()
     

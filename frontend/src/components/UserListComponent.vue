@@ -45,7 +45,6 @@ export default {
   },
   setup(props, context) {
     const csvc = commonService()
-    const { link } = config()
     const isFollow = ref(false)
     const { link } = config()
     

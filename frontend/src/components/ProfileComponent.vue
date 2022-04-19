@@ -73,7 +73,6 @@ export default {
   name: 'ProfileComponent',
   setup() {
     const csvc = commonService()
-    const { link } = config()
     const psvc = profileService()
     const { link } = config()
 
