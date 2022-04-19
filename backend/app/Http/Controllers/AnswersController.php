@@ -24,6 +24,7 @@ class AnswersController extends Controller
             DB::beginTransaction();
 
             $answers = $request->progress;
+            $answers_array = array();
             $status_id = 0;
 
             foreach ($answers as $answer) {
@@ -46,23 +47,31 @@ class AnswersController extends Controller
                     }
                 }
 
-                $create_answer = new UserAnswerModel();
-                $create_answer->category_id = $answer->category_id;
-                $create_answer->question_id = $answer->question_id;
-                $create_answer->choice_id = $answer->choice_id;
-                $create_answer->user_id = Auth::user()->user_id;
-                $create_answer->status_id = $status_id;
-                $create_answer->save();
+                array_push($answers_array,
+                    [
+                        'category_id' => $answer->category_id,
+                        'question_id' => $answer->question_id,
+                        'user_id' => Auth::user()->user_id,
+                        'choice_id' => $answer->choice_id,
+                        'status_id' => $status_id
+                    ]
+                );
             }
 
+            $create_user_answer = UserAnswerModel::upsert($answers_array, ['question_id', 'user_id'], ['choice_id', 'status_id']);
+            
             $progress = StatusModel::where('code', 'CMP')->first();
 
-            $category_used = new CategoryUsedModel();
-            $category_used->category_id = $request->category_id;
-            $category_used->question_id = $request->current_question_id;
-            $category_used->status_id = $progress->status_id;
-            $category_used->user_id = Auth::user()->user_id;
-            $category_used->save();
+            $create_answer = CategoryUsedModel::updateOrCreate(
+                [
+                'category_id' => $request->category_id,
+                'user_id' => Auth::user()->user_id
+                ],
+                [
+                'question_id' => $request->current_question_id,
+                'status_id' => $progress->status_id
+                ]
+            );
 
             $this->response->status_code = 1;
             $this->response->message = "success";

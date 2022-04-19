@@ -21,6 +21,9 @@ return new class extends Migration
             $table->integer('status_id');
             $table->integer('user_id');
             $table->timestamps();
+
+            $table->index(['question_id', 'user_id']);
+            $table->unique(['question_id', 'user_id']);
         });
     }
 
