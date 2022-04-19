@@ -8,6 +8,7 @@ import CategoryView from '../views/CategoryView.vue'
 import QuestionsView from '../views/QuestionsView.vue'
 import LessonsView from '../views/LessonsView.vue'
 import AnswersView from '../views/AnswersView.vue'
+import AccountCreatedView from '../views/AccountCreatedView.vue'
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: '/answer',
     name: 'Answer',
     component: AnswersView
+  },
+  {
+    path: '/account-created',
+    name: 'AccountCreated',
+    component: AccountCreatedView
   }
 ]
 

@@ -49,7 +49,9 @@ class FollowingController extends Controller
     }
 
     public function user_list() {
-        $users = User::all();
+        $users = User::with('following', 'followed')->whereHas('role', function ($role) {
+            $role->where('code', 'STD');
+        })->get();
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = $users;

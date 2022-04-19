@@ -137,7 +137,13 @@ export default {
         const response = await submitRequest.data
         if (response.status_code === 1) {
             csvc.updateUser(response.data)
-            location.reload()
+            csvc.message({
+              title: "Success!",
+              text: "Profile Updated Successfuly.",
+              icon: 'success'
+            })
+            inputsState.value = true
+            buttonState.value = false
             return
         }
         errorMessage.value = response.data

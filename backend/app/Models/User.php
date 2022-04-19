@@ -39,6 +39,14 @@ class User extends Authenticatable
         return $this->belongsTo(RoleModel::class, 'role_id', 'role_id');
     }
 
+    public function following() {
+        return $this->hasMany(UserRelationshipModel::class, 'following_id', 'user_id');
+    }
+
+    public function followed() {
+        return $this->hasMany(UserRelationshipModel::class, 'followed_id', 'user_id');
+    }
+
     /**
      * The attributes that should be cast.
      *

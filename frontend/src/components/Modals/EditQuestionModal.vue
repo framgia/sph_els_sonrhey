@@ -34,8 +34,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
           </div>
         </form>
       </div>
@@ -54,7 +53,7 @@ import config from '../../composables/config'
 
 export default {
   name: 'EditQuestionModal',
-  setup() {
+  setup(props, context) {
     const csvc = commonService()
     const { answer } = getAnswer()
     const { link } = config()
@@ -76,6 +75,7 @@ export default {
     }
 
     const submitQuestion = async () => {
+      context.emit('actionLoader', true)
       const questionsIn = {
         "question_id" : question.value.question_id,
         "category_id" : newCategoryId.value == undefined ? question.value.category.category_id : newCategoryId.value,
@@ -95,8 +95,12 @@ export default {
         })
 
         const response = await create.data.data
-        location.reload()
-        
+        context.emit('actionLoader', true)
+        csvc.message({
+          title: "Success!",
+          text: "Question Updated Successfuly.",
+          icon: 'success'
+        })
       } catch(e) {
         console.error(e)
       }

@@ -22,7 +22,7 @@ import config from '../composables/config'
 export default {
   name: 'CategoryListComponent',
   props: ['category'],
-  setup(props) {
+  setup(props, context) {
     const csvc = commonService()
     const { link } = config()
 
@@ -31,6 +31,7 @@ export default {
     }
     
     const deleteCategory = async (category) => {
+      context.emit('actionLoader', true)
       const categoryIn = {
         "category_id" : category.category_id,
       }
@@ -43,8 +44,13 @@ export default {
         })
 
         const response = await deleteCat.data.data
-        location.reload()
+        context.emit('actionLoader', false)
         
+        csvc.message({
+          title: "Success!",
+          text: "Category Deleted Successfuly.",
+          icon: 'success'
+        })
       } catch(e) {
         console.error(e)
       }

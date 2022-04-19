@@ -52,7 +52,7 @@ class ProfileController extends Controller
 
         $this->response->status_code = 1;
         $this->response->message = "success";
-        $this->response->data = $user;
+        $this->response->data = User::with('role')->where('user_id', $user->user_id)->first();
 
         return response()->json($this->response);
     }

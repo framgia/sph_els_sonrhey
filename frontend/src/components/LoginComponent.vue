@@ -32,7 +32,7 @@ import config from '../composables/config'
 
 export default {
   name: 'LoginComponent',
-  setup() {
+  setup(props, context) {
     const csvc = commonService()
     const router = useRouter()
     const { link } = config()
@@ -52,8 +52,10 @@ export default {
       const response = await submitRequest.data
 
       if (response.status_code === 1) {
-          csvc.setUserAndToken(response.data.user, response.data.token)
-          router.push({ path : '/dashboard' })
+        csvc.setUserAndToken(response.data.user, response.data.token)
+        router.push({ path : '/dashboard' })
+      } else {
+        context.emit('errorLogin', response.message)
       }
 
       isLoading.value = false

@@ -22,7 +22,7 @@ import store from '@/store'
 export default {
   name: 'QuestionListComponent',
   props: ['question'],
-  setup() {
+  setup(props, context) {
     const csvc = commonService()
     const { link } = config()
 
@@ -31,6 +31,8 @@ export default {
     }
     
     const deleteQuestion = async (question) => {
+      context.emit('actionLoader', true)
+
       const questionIn = {
         "question_id" : question.question_id,
       }
@@ -43,8 +45,12 @@ export default {
         })
 
         const response = await deleteQ.data.data
-        location.reload()
-        
+        context.emit('actionLoader', true)
+        csvc.message({
+          title: "Success!",
+          text: "Question deleted Successfuly.",
+          icon: 'success'
+        })
       } catch(e) {
         console.error(e)
       }

@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2'
+
 const setterAndGetter = () => {
   const setUserAndToken = (user, token) => {
     localStorage.setItem('user', JSON.stringify(user))
@@ -25,7 +27,15 @@ const setterAndGetter = () => {
     return localStorage.clear()
   }
 
-  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore }
+  const message = ({ title : title, text : text, icon : icon}) => {
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: icon
+    })
+  }
+
+  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message }
 }
 
 export default setterAndGetter

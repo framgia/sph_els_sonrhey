@@ -7,7 +7,10 @@
             <h3>Login</h3>
             <div class="mb-4"></div>
           </div>
-          <LoginComponent />
+          <div class="alert alert-danger error" :class="{'d-none' : !isIncorrect}" role="alert">
+            <strong>Erorr!</strong> {{ message }}
+          </div>
+          <LoginComponent @errorLogin="errorLogin"/>
         </div>
       </div>
     </div>
@@ -15,11 +18,23 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 import LoginComponent from '../components/LoginComponent.vue'
 export default {
   name: 'HomeView',
   components: {
     LoginComponent
+  },
+  setup() {
+    const isIncorrect = ref(false)
+    const message = ref('')
+
+    const errorLogin = (errorMessage) => {
+      isIncorrect.value = true
+      message.value = errorMessage
+    }
+    
+    return { isIncorrect, message, errorLogin }
   }
 }
 </script>
