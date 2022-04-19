@@ -48,7 +48,7 @@ export default {
       if (user.role.code === 'SA') {
         return true
       }
-        return false
+      return false
     }))
     const logout = () => {
       csvc.removeUserAndToken()

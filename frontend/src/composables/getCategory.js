@@ -13,7 +13,7 @@ const getCategory = () => {
   const fetchCategory = async () => {
     const categories = await axios.get(`${link}/api/get-category`, {
       headers: {
-          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+        Authorization: `Bearer ${csvc.getUserAndToken('token')}`
       }
     })
   
@@ -26,7 +26,7 @@ const getCategory = () => {
     const category = categories
     if (question.length == undefined && category != undefined) {
       const newCat = category.map(q => {
-          return q.category_id ==  question.category.category_id ? {...q, selected: true} : q 
+        return q.category_id ==  question.category.category_id ? {...q, selected: true} : q 
       })
       return newCat
     }
@@ -35,7 +35,7 @@ const getCategory = () => {
   const getCategoryWithQuestions = async () => {
     const categories = await axios.get(`${link}/api/get-category-with-questions`, {
       headers: {
-          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+        Authorization: `Bearer ${csvc.getUserAndToken('token')}`
       }
     })
   
