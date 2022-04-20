@@ -17,4 +17,8 @@ class CategoryUsedModel extends Model
         'question_id',
         'user_id'
     ];
+
+    public function status() {
+        return $this->belongsTo(StatusModel::class, 'status_id', 'status_id');
+    }
 }

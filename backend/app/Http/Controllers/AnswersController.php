@@ -92,4 +92,14 @@ class AnswersController extends Controller
             return response()->json($this->response);
         }
     }
+
+    public function get_user_answer($id) {
+        $user_answer = UserAnswerModel::all();
+
+        $this->response->status_code = 0;
+        $this->response->message = "success";
+        $this->response->data = $user_answer;
+
+        return response()->json($this->response);
+    }
 }
