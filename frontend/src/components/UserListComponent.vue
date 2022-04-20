@@ -16,9 +16,17 @@
                   <h5>{{ user.email_address }}</h5>
                 </td>
                 <td>
-                  <button class="btn btn-primary" @click="follow_user(user.user_id)" :disabled=isFollow>
+                  <button type="button" class="btn btn-primary" v-if="followed === 'FF'"  @click="follow_user(user.user_id)" :disabled=isFollow>
                     <span v-if="!isFollow">Follow</span>
                     <span v-else>Following</span>
+                  </button>
+                  <button type="button" class="btn btn-warning" v-if="followed === 'FB'"  @click="follow_user(user.user_id)" :disabled=isFollow>
+                    <span v-if="!isFollow">Followback</span>
+                    <span v-else>Following</span>
+                  </button>
+                  <button type="button" class="btn btn-danger" v-if="followed === 'UF'" @click="unfollow_user(user.user_id)" :disabled=isFollow>
+                    <span v-if="!isFollow">Unfollow</span>
+                    <span v-else>Unfollowing</span>
                   </button>
                 </td>
               </tr>
@@ -31,7 +39,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import axios from 'axios'
 import commonService from '../composables/commonService'
 import config from '../composables/config'
@@ -43,6 +51,39 @@ export default {
     const csvc = commonService()
     const isFollow = ref(false)
     const { link } = config()
+    const userId = JSON.parse(csvc.getUserAndToken('user')).user_id
+
+    const followed = computed(() => {
+      const isFollow = props.user.following.filter(q => q.followed_id === userId)
+      if (isFollow.length) {
+        return 'UF'
+      }
+      const followBack = props.user.followed.filter(q => q.following_id === userId)
+      if (followBack.length) {
+        return 'FB'
+      }
+      return 'FF'
+    })
+
+    const unfollow_user = async (unFollowUserId) => {
+      isFollow.value = !isFollow.value
+      try {
+        const unFollowingIn = {
+          "following_id" : unFollowUserId,
+          "followed_id" : userId
+        }
+        const unfollow = await axios.post(`${link}/api/unfollow`, unFollowingIn ,{
+          headers: {
+            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+          }
+        })
+        isFollow.value = !isFollow.value
+        const response = await unfollow.data.data
+        context.emit('show', response)
+      } catch(e) {
+        console.error(e)
+      }
+    }
     
     const follow_user = async (user_id) => {
       isFollow.value = !isFollow.value
@@ -55,13 +96,14 @@ export default {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
         })
+        isFollow.value = !isFollow.value
         const response = await follow.data.data
         context.emit('show', response)
       } catch(e) {
         console.error(e)
       }
     }
-    return { follow_user, isFollow } 
+    return { follow_user, isFollow, followed, unfollow_user  } 
   }
 }
 </script>

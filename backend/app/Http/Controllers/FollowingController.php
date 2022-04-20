@@ -49,12 +49,28 @@ class FollowingController extends Controller
     }
 
     public function user_list() {
+        $user_id = Auth::user()->user_id;
         $users = User::with('following', 'followed')->whereHas('role', function ($role) {
             $role->where('code', 'STD');
-        })->get();
+        })
+        ->where('user_id', '<>', $user_id)
+        ->get();
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = $users;
+
+        return response()->json($this->response);
+    }
+
+    public function unfollow(Request $request) {
+        $unfollow = UserRelationshipModel::where([
+          'followed_id' => $request->followed_id,
+          'following_id' => $request->following_id
+        ])->delete();
+
+        $this->response->status_code = 1;
+        $this->response->message = "success";
+        $this->response->data = "Unfollowed Succesfully!";
 
         return response()->json($this->response);
     }

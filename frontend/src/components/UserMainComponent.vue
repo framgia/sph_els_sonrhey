@@ -9,7 +9,7 @@
             <input type="text" class="form-control search-user" placeholder="Search User">
           </div>
           <div class="alert alert-success alert-dismissible fade show" :class="{'d-none' : !alertButton}" role="alert">
-            <strong>Success!</strong> User is followed successfuly!
+            <strong>Success!</strong> User {{ alertMessage }}
             <button type="button" class="btn-close" :data-bs-dismiss="{'alert' : !hideAlert}" @click="close_alert" aria-label="Close"></button>
           </div>
           <div class="user-list">
@@ -39,6 +39,7 @@ export default {
     const userList = ref()
     const alertButton = ref(false)
     const hideAlert = ref(false)
+    const alertMessage = ref('')
 
     const close_alert = () => {
       hideAlert.value = !hideAlert.value
@@ -46,7 +47,9 @@ export default {
     }
 
     const show = (response) => {
+      alertMessage.value = response
       alertButton.value = true
+      get_users()
     }
 
     const get_users = async () => {
@@ -65,7 +68,7 @@ export default {
 
     get_users()
 
-    return { userList, show, alertButton, close_alert, hideAlert }
+    return { userList, show, alertButton, close_alert, hideAlert, alertMessage }
   }
 }
 </script>

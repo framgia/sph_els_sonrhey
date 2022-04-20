@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('follow-back', [FollowingController::class, 'follow_back']);
     Route::get('user-list', [FollowingController::class, 'user_list']);
     Route::get('user-relationships', [FollowingController::class, 'get_user_relationship']);
+    Route::post('unfollow', [FollowingController::class, 'unfollow']);
 
     Route::post('create-category', [CategoriesController::class, 'create_category']);
     Route::post('edit-category', [CategoriesController::class, 'edit_category']);
