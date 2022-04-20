@@ -6,7 +6,7 @@ import config from './config'
 const getAnswer = () => {
   const { getUserAndToken } = commonService()
   const { link } = config()
-  const user_id = JSON.parse(getUserAndToken('user')).user_id
+  const userId = JSON.parse(getUserAndToken('user')).user_id
   const userAnswer = ref([])
 
   const answer = (question) => {
@@ -18,9 +18,9 @@ const getAnswer = () => {
     }
   }
 
-  const getUserAnswer = async (user_id) => {
+  const getUserAnswer = async (userId) => {
     try {
-      const answer = await axios.get(`${link}/api/get-user-answer/${user_id}`, {
+      const answer = await axios.get(`${link}/api/get-user-answer/${userId}`, {
         headers: {
             Authorization: `Bearer ${getUserAndToken('token')}`
         }

@@ -43,8 +43,8 @@ export default {
     const { progress, quizProgressStatus } = getResults()
     const { getCategoriesUsed, categoriesUsed } = getCategory()
     
-    const user_id = JSON.parse(getUserAndToken('user')).user_id
-    const getCategoryUsed = getCategoriesUsed(user_id)
+    const userId = JSON.parse(getUserAndToken('user')).user_id
+    const getCategoryUsed = getCategoriesUsed(userId)
     
     const isUsed = computed (() => {
       const quizProgress = progress(categoriesUsed.value, props.category)

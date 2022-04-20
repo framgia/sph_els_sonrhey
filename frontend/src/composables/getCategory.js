@@ -44,8 +44,8 @@ const getCategory = () => {
     categoriesWithQuestion.value = response
   }
 
-  const getCategoriesUsed = async (user_id) => {
-    const categories = await axios.get(`${link}/api/get-categories-used/${user_id}`, {
+  const getCategoriesUsed = async (userId) => {
+    const categories = await axios.get(`${link}/api/get-categories-used/${userId}`, {
       headers: {
         Authorization: `Bearer ${csvc.getUserAndToken('token')}`
       }
