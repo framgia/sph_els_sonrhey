@@ -11,7 +11,7 @@
                 <div class="text-muted">Progress: ({{ isUsed }} / {{ category.questions.length }})</div>
               </td>
               <td class="action">
-                <button class="btn btn-success" v-if="quizStatus === 'CMP'"  data-bs-toggle="modal" data-bs-target="#resutsModal">View Result</button>
+                <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#resutsModal" @click="actionViewResult(category)" v-if="quizStatus === 'CMP'">View Result</button>
                 <button class="btn btn-danger" @click="takeQuiz(category)" v-if="quizStatus === 'INP'">Continue Quiz</button>
                 <button class="btn btn-primary" @click="takeQuiz(category)" v-if="quizStatus === 'DEF'">Take Quiz</button>
               </td>
@@ -30,6 +30,9 @@ import getCategory from '../composables/getCategory'
 import { computed } from 'vue'
 import ResultsModal from '../components/Modals/ResultModal.vue'
 import getResults from '../composables/getResults'
+import getAnswer from '../composables/getAnswer'
+import { useStore } from 'vuex'
+import store from '@/store'
 
 export default {
   name: 'LessonsListComponent',
@@ -39,20 +42,31 @@ export default {
   },
   setup(props) {
     const router = useRouter()
+    const stored = useStore()
     const { settempStore, getUserAndToken } = commonService()
     const { progress, quizProgressStatus } = getResults()
-    const { getCategoriesUsed, categoriesUsed } = getCategory()
+    const { getCategoriesUsed, categoriesUsed, isLoaded } = getCategory()
+    const { viewResult, results } = getAnswer()
     
     const userId = JSON.parse(getUserAndToken('user')).user_id
     const getCategoryUsed = getCategoriesUsed(userId)
+
+    const actionViewResult = (category) => {
+      const request = {
+        "user_id" : userId,
+        "category_id" : category.category_id
+      }
+      viewResult(request)
+      stored.commit('setResults', results)
+    }
     
     const isUsed = computed (() => {
-      const quizProgress = progress(categoriesUsed.value, props.category)
+      const quizProgress = progress(categoriesUsed.value, props.category, isLoaded.value)
       return quizProgress
     })
 
     const quizStatus = computed(() => {
-      const qStatus = quizProgressStatus(categoriesUsed.value, props.category)
+      const qStatus = quizProgressStatus(categoriesUsed.value, props.category, isLoaded.value)
       return qStatus
     })
 
@@ -61,7 +75,7 @@ export default {
       router.push({path : '/answer' })
     }
 
-    return { takeQuiz, isUsed, quizStatus }
+    return { takeQuiz, isUsed, quizStatus, actionViewResult }
   }
 }
 </script>

@@ -59,8 +59,8 @@ class AnswersController extends Controller
             }
 
             $create_user_answer = UserAnswerModel::upsert($answers_array, ['question_id', 'user_id'], ['choice_id', 'status_id']);
-            
-            $progress = StatusModel::where('code', 'CMP')->first();
+
+            $progress = StatusModel::where('code', $request->answer_status)->first();
 
             $create_answer = CategoryUsedModel::updateOrCreate(
                 [
@@ -72,7 +72,7 @@ class AnswersController extends Controller
                 'status_id' => $progress->status_id
                 ]
             );
-
+            
             $this->response->status_code = 1;
             $this->response->message = "success";
             $this->response->data = [
@@ -84,7 +84,6 @@ class AnswersController extends Controller
             return response()->json($this->response);
         } catch (\Exception $ex) {
             DB::rollback();
-
             $this->response->status_code = 0;
             $this->response->message = "error";
             $this->response->data = $ex;
@@ -94,7 +93,21 @@ class AnswersController extends Controller
     }
 
     public function get_user_answer($id) {
-        $user_answer = UserAnswerModel::all();
+        $user_answer = UserAnswerModel::where('user_id', $id)->get();
+
+        $this->response->status_code = 0;
+        $this->response->message = "success";
+        $this->response->data = $user_answer;
+
+        return response()->json($this->response);
+    }
+
+    public function get_result(Request $request) {
+        $user_answer = UserAnswerModel::with('choice', 'status', 'question', 'question.answer', 'question.answer.choice')
+        ->where([
+            'user_id' => $request->user_id,
+            'category_id' => $request->category_id
+        ])->get();
 
         $this->response->status_code = 0;
         $this->response->message = "success";
