@@ -1,17 +1,17 @@
 <template>
   <NavbarComponent />
-  <DashboardComponent />
+  <MyActivityLogComponent />
 </template>
 
 <script>
 import NavbarComponent from '../components/NavbarComponent.vue'
-import DashboardComponent from '../components/DashboardMainComponent.vue'
+import MyActivityLogComponent from '../components/MyActivityLog/MyActivityLogComponent.vue'
 
 export default {
-  name: 'DashboardView',
+  name: 'MyActivityLogView',
   components: {
     NavbarComponent,
-    DashboardComponent
+    MyActivityLogComponent
   }
 }
 </script>

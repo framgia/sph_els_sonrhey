@@ -9,6 +9,8 @@ import QuestionsView from '../views/QuestionsView.vue'
 import LessonsView from '../views/LessonsView.vue'
 import AnswersView from '../views/AnswersView.vue'
 import AccountCreatedView from '../views/AccountCreatedView.vue'
+import ProfileVisitView from '../views/ProfileVisitView.vue'
+import MyActivityLogView from '../views/MyActivityLogView.vue'
 
 const routes = [
   {
@@ -60,6 +62,16 @@ const routes = [
     path: '/account-created',
     name: 'AccountCreated',
     component: AccountCreatedView
+  },
+  {
+    path: '/profile-visit',
+    name: 'ProfileVisit',
+    component: ProfileVisitView
+  },
+  {
+    path: '/my-activity-log',
+    name: 'MyActivityLog',
+    component: MyActivityLogView
   }
 ]
 

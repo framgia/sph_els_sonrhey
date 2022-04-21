@@ -1,17 +1,17 @@
 <template>
   <NavbarComponent />
-  <DashboardComponent />
+  <ProfileVisitComponent />
 </template>
 
 <script>
 import NavbarComponent from '../components/NavbarComponent.vue'
-import DashboardComponent from '../components/DashboardMainComponent.vue'
+import ProfileVisitComponent from '../components/ProfileVisit/ProfileVisitMainComponent.vue'
 
 export default {
-  name: 'DashboardView',
+  name: 'ProfileVisitView',
   components: {
     NavbarComponent,
-    DashboardComponent
+    ProfileVisitComponent
   }
 }
 </script>

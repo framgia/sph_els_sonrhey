@@ -5,7 +5,9 @@
         <div class="card-title border-bottom mb-4 text-center">
           <img :src="'http://'+user.avatar" width="200" style="border-radius: 10em;">
           <div class="mb-3"></div>
-          <div class="mb-4"></div>
+            <span class="badge bg-warning me-2 p-learned">20 Followers</span>
+            <span class="badge bg-primary p-finished">10 Following</span>
+          <div class="mb-3"></div>
         </div>
         <div class="row">
           <div class="col-md  -6">
@@ -44,17 +46,26 @@
           <label for="formFile" class="form-label">Update Avatar <a href="#" class="fa fa-edit" :class="[inputsState ? 'd-none' : '']" @click="editInputs('avatar')"></a></label>
           <input class="form-control" type="file" id="formFile" ref="avatar" :onChange="pickImage" disabled>
         </div>
-        <div class="d-grid mb-4">
-          <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :class="[buttonState ? 'd-none' : '']">
-            <span v-if="inputsState">Edit Info</span>
-            <span v-else>Cancel Edit</span>
-          </button>
-        </div>
-        <div class="d-grid mb-4">
-          <button type="submit" class="btn btn-primary btn-lg" :class="[inputsState ? 'd-none' : '']" @click="updateInfo" :disabled="buttonState">
-            <span v-if="!buttonState">Update Info</span>
-            <span v-else>Updating Profile please wait ...</span>
-          </button>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="d-grid mb-4">
+              <a href="/my-activity-log" class="btn btn-warning btn-lg">Activity Log</a>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-grid mb-4">
+              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :class="[buttonState ? 'd-none' : '']">
+                <span v-if="inputsState">Edit Info</span>
+                <span v-else>Cancel Edit</span>
+              </button>
+            </div>
+          </div>
+          <div class="d-grid mb-4">
+            <button type="submit" class="btn btn-primary btn-lg" :class="[inputsState ? 'd-none' : '']" @click="updateInfo" :disabled="buttonState">
+              <span v-if="!buttonState">Update Info</span>
+              <span v-else>Updating Profile please wait ...</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
