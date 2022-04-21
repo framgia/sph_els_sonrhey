@@ -24,7 +24,6 @@ export default {
   setup(props, context) {
     const categoryId = props.question.category_id
     const clickValue = ref('')
-
     const selectChoice = (choice) => {
       clickValue.value = choice.choice_id
       const answer = {

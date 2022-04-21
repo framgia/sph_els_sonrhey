@@ -64,10 +64,12 @@ export default {
     const submitAnswer = async () => {
       actionLoader()
       try {
+        const answerStatus = (questions.value.length === answerValues.value.length) ? 'CMP' : 'INP' 
         const submitRequest = {
             category_id : categoryId.value,
             current_question_id : questionId.value,
-            progress : answerValues.value
+            progress : answerValues.value,
+            answer_status : answerStatus
         }
 
         const answerData = await axios.post(`${link}/api/create-answer`, submitRequest, {

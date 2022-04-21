@@ -13,6 +13,7 @@
 <script>
 import LessonsListComponent from '../components/LessonsListComponent.vue'
 import getCategory from '../composables/getCategory'
+import commonService from '../composables/commonService'
 
 export default {
   name: 'LessonsMainComponent',

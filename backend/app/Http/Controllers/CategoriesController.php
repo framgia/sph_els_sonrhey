@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ViewModels\Response;
 use App\Models\CategoryModel;
+use App\Models\CategoryUsedModel;
 
 class CategoriesController extends Controller
 {
@@ -63,6 +64,16 @@ class CategoriesController extends Controller
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = $get_categories;
+
+        return response()->json($this->response);
+    }
+
+    public function get_categories_used($id) {
+        $categories_used = CategoryUsedModel::with('status')->where('user_id', $id)->get();
+
+        $this->response->status_code = 1;
+        $this->response->message = "success";
+        $this->response->data = $categories_used;
 
         return response()->json($this->response);
     }
