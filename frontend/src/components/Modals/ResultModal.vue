@@ -21,8 +21,8 @@
                 <td>{{ result.question.answer.choice.letter }}.) {{ result.question.answer.choice.description }}</td>
                 <td>{{ result.choice.letter }}.) {{ result.choice.description }}</td>
                 <td>
-                  <span v-if="result.status.code === 'IRR'" style="color: red" class="fw-bold">{{ result.status.name }} <i class="fa fa-times"></i></span>
-                  <span v-if="result.status.code === 'CRR'" style="color: green" class="fw-bold">{{ result.status.name }} <i class="fa fa-check"></i></span>
+                  <span v-if="result.status.code === correct" style="color: red" class="fw-bold">{{ result.status.name }} <i class="fa fa-times"></i></span>
+                  <span v-if="result.status.code === incorrect" style="color: green" class="fw-bold">{{ result.status.name }} <i class="fa fa-check"></i></span>
                 </td>
               </tr>
             </tbody>
@@ -39,6 +39,8 @@
 <script>
 import store from '@/store'
 import { computed, ref, watch, watchEffect } from '@vue/runtime-core'
+import statuses from '../../composables/answerStatuses'
+
 export default {
   name: 'ResultsModal',
   methods: {
@@ -50,10 +52,11 @@ export default {
     const resultList = ref()
     const perfectScore = ref(0)
     const scoreGet = ref(0)
+    const { correct, incorrect } = statuses()
     const score = computed(() => {
-      if (resultList.value != undefined) {
+      if (resultList.value !== undefined) {
         perfectScore.value = resultList.value.length
-        scoreGet.value = resultList.value.filter(q => q.status.code === 'CRR')
+        scoreGet.value = resultList.value.filter(q => q.status.code === correct)
         if (scoreGet.value.length === 0) {
           return `Sorry! You got ${scoreGet.value.length + " / " + perfectScore.value} in this Quiz!`
         }
@@ -67,7 +70,7 @@ export default {
         resultList.value = result
       } 
     })
-    return { resultList, score }
+    return { resultList, score, correct, incorrect }
   }
 }
 </script>

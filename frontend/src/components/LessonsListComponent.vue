@@ -11,9 +11,9 @@
                 <div class="text-muted">Progress: ({{ isUsed }} / {{ category.questions.length }})</div>
               </td>
               <td class="action">
-                <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#resutsModal" @click="actionViewResult(category)" v-if="quizStatus === 'CMP'">View Result</button>
-                <button class="btn btn-danger" @click="takeQuiz(category)" v-if="quizStatus === 'INP'">Continue Quiz</button>
-                <button class="btn btn-primary" @click="takeQuiz(category)" v-if="quizStatus === 'DEF'">Take Quiz</button>
+                <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#resutsModal" @click="actionViewResult(category)" v-if="quizStatus === completed">View Result</button>
+                <button class="btn btn-danger" @click="takeQuiz(category)" v-if="quizStatus === inProgress">Continue Quiz</button>
+                <button class="btn btn-primary" @click="takeQuiz(category)" v-if="quizStatus === defaultStatus">Take Quiz</button>
               </td>
             </tr>
           </table>
@@ -33,6 +33,7 @@ import getResults from '../composables/getResults'
 import getAnswer from '../composables/getAnswer'
 import { useStore } from 'vuex'
 import store from '@/store'
+import statuses from '../composables/quizStatuses'
 
 export default {
   name: 'LessonsListComponent',
@@ -47,6 +48,7 @@ export default {
     const { progress, quizProgressStatus } = getResults()
     const { getCategoriesUsed, categoriesUsed, isLoaded } = getCategory()
     const { viewResult, results } = getAnswer()
+    const { completed, inProgress, defaultStatus } = statuses()
     
     const userId = JSON.parse(getUserAndToken('user')).user_id
     const getCategoryUsed = getCategoriesUsed(userId)
@@ -75,7 +77,7 @@ export default {
       router.push({path : '/answer' })
     }
 
-    return { takeQuiz, isUsed, quizStatus, actionViewResult }
+    return { takeQuiz, isUsed, quizStatus, actionViewResult, completed, inProgress, defaultStatus }
   }
 }
 </script>

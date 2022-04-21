@@ -38,7 +38,7 @@ export default {
       if (userAnswer.value.length) {
         hasAnswer.value = true
         const currentQuestion = userAnswer.value.find(q => q.question_id === props.question.question_id)
-        if (currentQuestion != undefined) {
+        if (currentQuestion !== undefined) {
           clickValue.value = currentQuestion.choice_id
           const currentChoice = props.question.choices.find(q => q.choice_id === currentQuestion.choice_id)
           const answer = {

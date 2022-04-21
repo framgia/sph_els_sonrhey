@@ -15,6 +15,7 @@ import commonService from '../composables/commonService'
 import config from '../composables/config'
 import Loader from '../components/LoadingComponent.vue'
 import { useRouter } from 'vue-router'
+import quizStatus from '../composables/quizStatuses'
 
 export default {
   name: 'AnswerMainComponent',
@@ -24,6 +25,7 @@ export default {
   },
   setup() {
     const { getTempStore, getUserAndToken, message } = commonService()
+    const { completed, inProgress } = quizStatus()
     const { link } = config()
     const router = useRouter()
     const questions = ref(JSON.parse(getTempStore('category')).questions)
@@ -64,7 +66,7 @@ export default {
     const submitAnswer = async () => {
       actionLoader()
       try {
-        const answerStatus = (questions.value.length === answerValues.value.length) ? 'CMP' : 'INP' 
+        const answerStatus = (questions.value.length === answerValues.value.length) ? completed : inProgress 
         const submitRequest = {
             category_id : categoryId.value,
             current_question_id : questionId.value,
