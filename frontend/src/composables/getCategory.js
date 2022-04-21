@@ -10,6 +10,7 @@ const getCategory = () => {
   const categoriesList = ref()
   const categoriesWithQuestion = ref([])
   const categoriesUsed = ref([])
+  const isLoaded = ref(false)
 
   const fetchCategory = async () => {
     const categories = await axios.get(`${link}/api/get-category`, {
@@ -53,9 +54,10 @@ const getCategory = () => {
   
     const response = await categories.data.data
     categoriesUsed.value = response
+    isLoaded.value = true
   }
 
-  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed }
+  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded }
 }
 
 export default getCategory

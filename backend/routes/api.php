@@ -48,4 +48,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('create-answer', [AnswersController::class, 'create_answer']);
     Route::get('get-user-answer/{id}', [AnswersController::class, 'get_user_answer']);
+    Route::post('get-result', [AnswersController::class, 'get_result']);
 });

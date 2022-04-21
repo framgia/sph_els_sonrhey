@@ -6,8 +6,8 @@ import config from './config'
 const getAnswer = () => {
   const { getUserAndToken } = commonService()
   const { link } = config()
-  const userId = JSON.parse(getUserAndToken('user')).user_id
   const userAnswer = ref([])
+  const results = ref([])
 
   const answer = (question) => {
     if (question.length == undefined) {
@@ -22,7 +22,7 @@ const getAnswer = () => {
     try {
       const answer = await axios.get(`${link}/api/get-user-answer/${userId}`, {
         headers: {
-            Authorization: `Bearer ${getUserAndToken('token')}`
+          Authorization: `Bearer ${getUserAndToken('token')}`
         }
       })
       const response = answer.data.data
@@ -32,7 +32,21 @@ const getAnswer = () => {
     }
   }
 
-  return { answer, getUserAnswer, userAnswer }
+  const viewResult = async (request) => {
+    try {
+      const result = await axios.post(`${link}/api/get-result`, request, {
+        headers: {
+            Authorization: `Bearer ${getUserAndToken('token')}`
+        }
+      })
+      const response = result.data.data
+      results.value = response
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  return { answer, getUserAnswer, userAnswer, viewResult, results }
 }
 
 export default getAnswer

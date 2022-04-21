@@ -3,7 +3,8 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     category : [],
-    question : []
+    question : [],
+    results : []
   },
   getters: {
   },
@@ -13,6 +14,9 @@ export default createStore({
     },
     setQuestion(state, value) {
       state.question = value
+    },
+    setResults(state, value) {
+      state.results = value
     }
   },
   actions: {

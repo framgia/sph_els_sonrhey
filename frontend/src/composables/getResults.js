@@ -1,28 +1,36 @@
-const getResults = () => {
-  const progress = (categoriesUsed, category) => {
-    if (categoriesUsed.length) {
-      const catUsed = categoriesUsed.find(q => q.category_id === category.category_id)
-      if (catUsed != undefined) {
-        const currentQuestionId = catUsed.question_id
-        const getIndex = category.questions.findIndex(q => q.question_id === currentQuestionId)
-        return getIndex + 1
-      }
-    }
-    return 0
-  }
+import statuses from './quizStatuses'
 
-  const quizProgressStatus = (categoriesUsed, category) => {
-    if (categoriesUsed.length) {
-      const catUsed = categoriesUsed.find(q => q.category_id === category.category_id)
-      if (catUsed != undefined) {
-        if (catUsed.status.code === 'CMP') {
-          return 'CMP'
-        } else if (catUsed.status.code === 'INP') {
-          return 'INP'
+const getResults = () => {
+  const { completed, inProgress, defaultStatus } = statuses()
+
+  const progress = (categoriesUsed, category, isLoaded) => {
+    if (isLoaded) {
+      if (categoriesUsed.length) {
+        const catUsed = categoriesUsed.find(q => q.category_id === category.category_id)
+        if (catUsed !== undefined) {
+          const currentQuestionId = catUsed.question_id
+          const getIndex = category.questions.findIndex(q => q.question_id === currentQuestionId)
+          return getIndex + 1
         }
       }
+      return 0
     }
-    return 'DEF'
+  }
+
+  const quizProgressStatus = (categoriesUsed, category, isLoaded) => {
+    if (isLoaded) {
+      if (categoriesUsed.length) {
+        const catUsed = categoriesUsed.find(q => q.category_id === category.category_id)
+        if (catUsed !== undefined) {
+          if (catUsed.status.code === completed) {
+            return completed
+          } else if (catUsed.status.code === inProgress) {
+            return inProgress
+          }
+        }
+      }
+      return defaultStatus
+    }
   }
 
   return { progress, quizProgressStatus }
