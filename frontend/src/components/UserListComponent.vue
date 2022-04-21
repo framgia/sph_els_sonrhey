@@ -16,15 +16,15 @@
                   <h5>{{ user.email_address }}</h5>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-primary" v-if="followed === 'FF'"  @click="follow_user(user.user_id)" :disabled=isFollow>
+                  <button type="button" class="btn btn-primary" v-if="followed === isFollowUser"  @click="follow_user(user.user_id)" :disabled=isFollow>
                     <span v-if="!isFollow">Follow</span>
                     <span v-else>Following</span>
                   </button>
-                  <button type="button" class="btn btn-warning" v-if="followed === 'FB'"  @click="follow_user(user.user_id)" :disabled=isFollow>
+                  <button type="button" class="btn btn-warning" v-if="followed === isFollowBackUser"  @click="follow_user(user.user_id)" :disabled=isFollow>
                     <span v-if="!isFollow">Followback</span>
                     <span v-else>Following</span>
                   </button>
-                  <button type="button" class="btn btn-danger" v-if="followed === 'UF'" @click="unfollow_user(user.user_id)" :disabled=isFollow>
+                  <button type="button" class="btn btn-danger" v-if="followed === isUnFollowUser" @click="unfollow_user(user.user_id)" :disabled=isFollow>
                     <span v-if="!isFollow">Unfollow</span>
                     <span v-else>Unfollowing</span>
                   </button>
@@ -43,6 +43,7 @@ import { ref, computed } from 'vue'
 import axios from 'axios'
 import commonService from '../composables/commonService'
 import config from '../composables/config'
+import userActions from '../composables/userActions'
 
 export default {
   name: 'UserListComponent',
@@ -51,18 +52,19 @@ export default {
     const csvc = commonService()
     const isFollow = ref(false)
     const { link } = config()
+    const { isFollowUser, isFollowBackUser, isUnFollowUser } = userActions()
     const userId = JSON.parse(csvc.getUserAndToken('user')).user_id
 
     const followed = computed(() => {
       const isFollow = props.user.following.filter(q => q.followed_id === userId)
       if (isFollow.length) {
-        return 'UF'
+        return isUnFollowUser
       }
       const followBack = props.user.followed.filter(q => q.following_id === userId)
       if (followBack.length) {
-        return 'FB'
+        return isFollowBackUser
       }
-      return 'FF'
+      return isFollowUser
     })
 
     const unfollow_user = async (unFollowUserId) => {
@@ -103,7 +105,7 @@ export default {
         console.error(e)
       }
     }
-    return { follow_user, isFollow, followed, unfollow_user  } 
+    return { follow_user, isFollow, followed, unfollow_user, isFollowUser, isFollowBackUser, isUnFollowUser  } 
   }
 }
 </script>
