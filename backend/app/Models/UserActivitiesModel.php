@@ -24,4 +24,16 @@ class UserActivitiesModel extends Model
     public function user_relationship() {
         return $this->hasMany(UserRelationshipModel::class, 'user_relationship_id', 'user_relationship_id');
     }
+
+    public function category() {
+        return $this->belongsTo(CategoryModel::class, 'category_id', 'category_id');
+    }
+
+    public function category_by_user() {
+        return $this->belongsTo(CategoryModel::class, 'category_id', 'category_id');
+    }
+
+    public function followed_by_user() {
+        return $this->belongsTo(UserRelationshipModel::class, 'user_relationship_id', 'user_relationship_id');
+    }
 }

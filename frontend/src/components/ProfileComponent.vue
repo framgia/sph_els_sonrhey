@@ -5,8 +5,8 @@
         <div class="card-title border-bottom mb-4 text-center">
           <img :src="'http://'+user.avatar" width="200" style="border-radius: 10em;">
           <div class="mb-3"></div>
-            <span class="badge bg-warning me-2 p-learned">20 Followers</span>
-            <span class="badge bg-primary p-finished">10 Following</span>
+            <span class="badge bg-warning me-2 p-learned"  data-bs-toggle="modal" data-bs-target="#followsModal" >{{ followersCount }} Followers</span>
+            <span class="badge bg-primary p-finished"  data-bs-toggle="modal" data-bs-target="#followsModal" >{{ followingCount }} Following</span>
           <div class="mb-3"></div>
         </div>
         <div class="row">
@@ -70,22 +70,31 @@
       </div>
     </div>
   </div>
+  <UserRelationshipComponent />
 </template>
 
 <script>
 import axios from 'axios'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import commonService from '../composables/commonService'
 import editedField from '../composables/editedFields'
 import profileService from '../composables/profileService'
 import config from '../composables/config'
+import getUserActivity from '../composables/getUserActivity'
+import UserRelationshipComponent from '../components/Tabs/UserRelationshipComponent.vue'
+import { useStore } from 'vuex';
 
 export default {
   name: 'ProfileComponent',
+  components: {
+    UserRelationshipComponent
+  },
   setup() {
+    const stored = useStore()
     const csvc = commonService()
     const psvc = profileService()
     const { link } = config()
+    const { getMyFollowers, myFollows, isLoaded } = getUserActivity()
 
     const inputsState = ref(true)
     const editPassword = ref(false)
@@ -162,8 +171,26 @@ export default {
         console.error(e)
       }
     }
+
+    getMyFollowers()
+
+    const followingCount = computed(() => {
+      if (isLoaded.value) {
+        stored.commit('setFollowing', myFollows.value.followed)
+        return myFollows.value.followed.length
+      }
+      return 0
+    })
+
+    const followersCount = computed(() => {
+      if (isLoaded.value) {
+        stored.commit('setFollowers', myFollows.value.following)
+        return myFollows.value.following.length
+      }
+      return 0
+    })
     
-    return { user, inputsState, editPassword, full_name, editInfo, email_address, password, avatar, c_password, new_password, pickImage, editInputs, updateInfo, errorMessage, buttonState }
+    return { user, inputsState, editPassword, full_name, editInfo, email_address, password, avatar, c_password, new_password, pickImage, editInputs, updateInfo, errorMessage, buttonState, followingCount, followersCount }
   }
 }
 </script>

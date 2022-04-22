@@ -8,7 +8,7 @@
           </div>
             <div class="container mt-3">
               <div class="activity-list">
-                <ProfileVisitListComponent />
+                <ProfileVisitListComponent v-for="activity in activities" :key="activity.user_activity_id" :activity="activity"/>
               </div>
             </div>
         </div>
@@ -22,6 +22,7 @@ import ProfileVisitListComponent from './ProfileVisitListComponent.vue'
 
 export default {
   name: 'ProfileVisitActivityComponent',
+  props: ['activities'],
   components: {
     ProfileVisitListComponent
   }

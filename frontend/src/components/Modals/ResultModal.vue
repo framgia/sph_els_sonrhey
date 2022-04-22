@@ -21,8 +21,8 @@
                 <td>{{ result.question.answer.choice.letter }}.) {{ result.question.answer.choice.description }}</td>
                 <td>{{ result.choice.letter }}.) {{ result.choice.description }}</td>
                 <td>
-                  <span v-if="result.status.code === correct" style="color: red" class="fw-bold">{{ result.status.name }} <i class="fa fa-times"></i></span>
-                  <span v-if="result.status.code === incorrect" style="color: green" class="fw-bold">{{ result.status.name }} <i class="fa fa-check"></i></span>
+                  <span v-if="result.status.code === incorrect" style="color: red" class="fw-bold">{{ result.status.name }} <i class="fa fa-times"></i></span>
+                  <span v-if="result.status.code === correct" style="color: green" class="fw-bold">{{ result.status.name }} <i class="fa fa-check"></i></span>
                 </td>
               </tr>
             </tbody>

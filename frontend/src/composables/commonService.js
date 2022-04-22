@@ -27,6 +27,14 @@ const setterAndGetter = () => {
     return localStorage.clear()
   }
 
+  const setVisitedUser = (user) => {
+    localStorage.setItem('visitedUser', JSON.stringify(user))
+  }
+
+  const getVisitedUser = () => {
+    return JSON.parse(localStorage.getItem('visitedUser'))
+  }
+
   const message = ({ title : title, text : text, icon : icon}) => {
     Swal.fire({
       title: title,
@@ -35,7 +43,7 @@ const setterAndGetter = () => {
     })
   }
 
-  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message }
+  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser }
 }
 
 export default setterAndGetter
