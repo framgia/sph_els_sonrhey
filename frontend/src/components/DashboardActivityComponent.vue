@@ -8,7 +8,7 @@
           </div>
             <div class="container mt-3">
               <div class="activity-list">
-                <DashboardActivityListComponent />
+                <DashboardActivityListComponent v-for="userActivity in allUserActivities" :key="userActivity.user_activity_id" :userActivity="userActivity" @actionLoader="actionLoaderList"/>
               </div>
             </div>
         </div>
@@ -19,11 +19,21 @@
 
 <script>
 import DashboardActivityListComponent from '../components/DashboardActivityListComponent.vue'
+import getUserActivity from '../composables/getUserActivity'
 
 export default {
   name: 'DashboardActivityComponent',
   components: {
     DashboardActivityListComponent
+  },
+  emits: ['actionLoader'],
+  setup(props, context) {
+    const { allUserActivities, allUserActivity } = getUserActivity()
+    const callUserActivity = allUserActivity()
+    const actionLoaderList = () => {
+      context.emit('actionLoader', true)
+    }
+    return { allUserActivities, actionLoaderList }
   }
 }
 </script>

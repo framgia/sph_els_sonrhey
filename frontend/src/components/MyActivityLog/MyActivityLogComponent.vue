@@ -9,7 +9,7 @@
             </div>
               <div class="container mt-3">
                 <div class="activity-list">
-                  <MyActivityLogListComponent />
+                  <MyActivityLogListComponent v-for="logs in myLogs" :key="logs.user_activity_id" :logs="logs"/>
                 </div>
               </div>
           </div>
@@ -21,11 +21,24 @@
 
 <script>
 import MyActivityLogListComponent from './MyActivityLogListComponent.vue'
+import getUserActivity from '../../composables/getUserActivity'
+import { computed } from 'vue'
 
 export default {
   name: 'MyActivityLogComponent',
   components: {
     MyActivityLogListComponent
+  },
+  setup() {
+    const { myActivityLogs, getMyActivityLog, isLoaded } = getUserActivity()
+    getMyActivityLog()
+    const myLogs = computed(() => {
+      if (isLoaded.value) {
+        return myActivityLogs.value
+      }
+    })
+
+    return { myLogs }
   }
 }
 </script>

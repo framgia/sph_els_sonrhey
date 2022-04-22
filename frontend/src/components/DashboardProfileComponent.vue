@@ -11,8 +11,8 @@
                 <h3 class="fw-bold">{{ user.full_name }}</h3>
                 <h6 class="text-muted">{{ user.role.name }}</h6>
                 <div class="mb-4"></div>
-                <span class="badge bg-warning me-2 p-learned">Answered 20 questions</span>
-                <span class="badge bg-primary p-finished">Finished 2 categories</span>
+                <span class="badge bg-warning me-2 p-learned">Answered {{ questionsAnswered }} questions</span>
+                <span class="badge bg-primary p-finished">Finished {{ categoriesFinished }} categories</span>
               </div>
             </div>
           </div>
@@ -23,15 +23,34 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 import commonService from '../composables/commonService'
+import getUserActivity from '../composables/getUserActivity'
 
 export default {
   name: 'DashboardProfileComponent',
   setup() {
     const { getUserAndToken } = commonService()
+    const { getMyLearnings, myLearningList, isLoaded } = getUserActivity()
     const user = JSON.parse(getUserAndToken('user'))
 
-    return { user }
+    getMyLearnings()
+
+    const questionsAnswered = computed(() => {
+      if (isLoaded.value) {
+        return myLearningList.value.questions_answered
+      }
+      return 0
+    })
+
+    const categoriesFinished = computed(() => {
+      if (isLoaded.value) {
+        return myLearningList.value.categories_finished
+      }
+      return 0
+    })
+
+    return { user, myLearningList, questionsAnswered, categoriesFinished }
   }
 }
 </script>

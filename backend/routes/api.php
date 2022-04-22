@@ -8,6 +8,7 @@ use App\Http\Controllers\FollowingController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\QuestionsController;
 use App\Http\Controllers\AnswersController;
+use App\Http\Controllers\UserActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('create-answer', [AnswersController::class, 'create_answer']);
     Route::get('get-user-answer/{id}', [AnswersController::class, 'get_user_answer']);
     Route::post('get-result', [AnswersController::class, 'get_result']);
+
+    Route::get('get-user-activities', [UserActivityController::class, 'get_user_activities']);
+    Route::post('get-user-activities-by-user', [UserActivityController::class, 'get_user_activities_by_user']);
+    Route::get('get-my-activities', [UserActivityController::class, 'get_my_activities']);
+    Route::get('get-my-learnings', [UserActivityController::class, 'get_my_learnings']);
+    Route::get('get-my-followers', [UserActivityController::class, 'get_my_followers']);
 });

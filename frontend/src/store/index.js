@@ -4,7 +4,9 @@ export default createStore({
   state: {
     category : [],
     question : [],
-    results : []
+    results : [],
+    following: [],
+    followers: []
   },
   getters: {
   },
@@ -17,6 +19,12 @@ export default createStore({
     },
     setResults(state, value) {
       state.results = value
+    },
+    setFollowing(state, value) {
+      state.following = value
+    },
+    setFollowers(state, value) {
+      state.followers = value
     }
   },
   actions: {

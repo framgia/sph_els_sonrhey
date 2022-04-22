@@ -8,6 +8,7 @@ use App\Models\UserRelationshipModel;
 use DB;
 use Auth;
 use App\Models\User;
+use App\Models\UserActivitiesModel;
 
 class FollowingController extends Controller
 {
@@ -27,6 +28,8 @@ class FollowingController extends Controller
 
     public function follow_user(Request $request) {
         try {
+            DB::beginTransaction();
+
             $my_id = Auth::user()->user_id;
 
             $user_relationship = new UserRelationshipModel();
@@ -34,12 +37,20 @@ class FollowingController extends Controller
             $user_relationship->followed_id = $my_id;
             $user_relationship->save();
 
+            $user_activity = new UserActivitiesModel();
+            $user_activity->user_id = Auth::user()->user_id;
+            $user_activity->user_relationship_id = $user_relationship->user_relationship_id;
+            $user_activity->save();
+
             $this->response->status_code = 1;
             $this->response->message = "success";
             $this->response->data = "Followed Successfuly!";
 
+            DB::commit();
             return response()->json($this->response);
         } catch (\Exception $ex) {
+            DB::rollback();
+            
             $this->response->status_code = 0;
             $this->response->message = "error";
             $this->response->data = "Data Error";
