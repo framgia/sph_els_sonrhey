@@ -12,30 +12,30 @@
         <div class="row">
           <div class="col-md  -6">
             <div class="mb-4">
-              <label class="mb-3">Full Name <a href="#" class="fa fa-edit" :class="[inputsState ? 'd-none' : '']" @click="editInputs('full_name')"></a></label>
+              <label class="mb-3">Full Name <a href="#" class="fa fa-edit" :class="{'d-none' : inputsState}" @click="editInputs('full_name')"></a></label>
               <input type="email" class="form-control form-control-lg" placeholder="your@email.com" ref="full_name" v-model="user.full_name" disabled>
             </div>
           </div>
           <div class="col-md-6">
             <div class="mb-4">
-              <label class="mb-3">Email Address <a href="#" class="fa fa-edit" :class="[inputsState ? 'd-none' : '']" @click="editInputs('email_address')"></a></label>
+              <label class="mb-3">Email Address <a href="#" class="fa fa-edit" :class="{'d-none' : inputsState}" @click="editInputs('email_address')"></a></label>
               <input type="email" class="form-control form-control-lg" placeholder="your@email.com" ref="email_address" v-model="user.email_address" disabled>
             </div>
           </div>
         </div>
         <div class="mb-4">
-          <label class="mb-3">Password <a href="#" class="fa fa-edit" :class="[inputsState ? 'd-none' : '']" @click="editInputs('password')"></a></label>
+          <label class="mb-3">Password <a href="#" class="fa fa-edit" :class="{'d-none' : inputsState}" @click="editInputs('password')"></a></label>
           <input type="password" class="form-control form-control-lg" ref="password"  value="**********" disabled>
           <span style="color:red" v-if="errorMessage">{{ errorMessage }}</span>
         </div>
-        <div class="row" :class="[!editPassword ? 'd-none' : '', inputsState ? 'd-none' : '' ]">
-          <div class="col-md-6">
+        <div class="row" :class="{'d-none' : inputsState}">
+          <div class="col-md-6" :class="{'d-none' : !editPassword}">
             <div class="mb-4">
               <label class="mb-3">New Password</label>
               <input type="password" class="form-control form-control-lg" v-model="new_password">
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6" :class="{'d-none' : !editPassword}">
             <div class="mb-4">
               <label class="mb-3">Confirm New Password</label>
               <input type="password" class="form-control form-control-lg" v-model="c_password">
@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="mb-4">
-          <label for="formFile" class="form-label">Update Avatar <a href="#" class="fa fa-edit" :class="[inputsState ? 'd-none' : '']" @click="editInputs('avatar')"></a></label>
+          <label for="formFile" class="form-label">Update Avatar <a href="#" class="fa fa-edit" :class="{'d-none' : inputsState}" @click="editInputs('avatar')"></a></label>
           <input class="form-control" type="file" id="formFile" ref="avatar" :onChange="pickImage" disabled>
         </div>
         <div class="row">
@@ -54,14 +54,14 @@
           </div>
           <div class="col-md-6">
             <div class="d-grid mb-4">
-              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :class="[buttonState ? 'd-none' : '']">
+              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :class="{'d-none' : buttonState}">
                 <span v-if="inputsState">Edit Info</span>
                 <span v-else>Cancel Edit</span>
               </button>
             </div>
           </div>
           <div class="d-grid mb-4">
-            <button type="submit" class="btn btn-primary btn-lg" :class="[inputsState ? 'd-none' : '']" @click="updateInfo" :disabled="buttonState">
+            <button type="submit" class="btn btn-primary btn-lg" :class="{'d-none' : inputsState}" @click="updateInfo" :disabled="buttonState">
               <span v-if="!buttonState">Update Info</span>
               <span v-else>Updating Profile please wait ...</span>
             </button>
