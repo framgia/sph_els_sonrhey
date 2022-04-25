@@ -1,5 +1,5 @@
 const config = () => {
-  const link = "http://localhost"
+  const link = "https://e-learning-sonrhey-be.herokuapp.com"
 
   return { link }
 }
