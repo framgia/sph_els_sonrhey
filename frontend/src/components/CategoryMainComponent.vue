@@ -67,7 +67,7 @@ export default {
 
     const getCategories = async () => {
       try {
-        const categories = await axios.get(`${link}/api/get-category`, {
+        const categories = await axios.get(`${link}/api/get-category-with-questions`, {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
