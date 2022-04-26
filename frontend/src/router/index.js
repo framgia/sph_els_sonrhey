@@ -9,6 +9,7 @@ import QuestionsView from '../views/QuestionsView.vue'
 import LessonsView from '../views/LessonsView.vue'
 import AnswersView from '../views/AnswersView.vue'
 import AccountCreatedView from '../views/AccountCreatedView.vue'
+import CategoryViewQuestions from '../views/CategoryViewQuestions.vue'
 import ProfileVisitView from '../views/ProfileVisitView.vue'
 import MyActivityLogView from '../views/MyActivityLogView.vue'
 
@@ -62,6 +63,11 @@ const routes = [
     path: '/account-created',
     name: 'AccountCreated',
     component: AccountCreatedView
+  },
+  {
+    path: '/category/:name',
+    name: 'CategoryViewQuestions',
+    component: CategoryViewQuestions
   },
   {
     path: '/profile-visit',
