@@ -24,7 +24,7 @@ const getQuestions = () => {
   }
 
   const getNextQuestion = async (url) => {
-    const questions = await axios.get(`${link}/api/get-questions/${url}`, {
+    const questions = await axios.get(`${link}/api/get-questions${url}`, {
       headers: {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
       }

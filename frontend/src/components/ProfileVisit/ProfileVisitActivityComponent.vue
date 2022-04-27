@@ -48,7 +48,7 @@ export default {
       const userIn = {
         "user_id" : props.user.user_id
       }
-      const gActivity = await axios.post(`${link}/api/get-user-activities-by-user/${url}`, userIn, {
+      const gActivity = await axios.post(`${link}/api/get-user-activities-by-user${url}`, userIn, {
         headers: {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }
