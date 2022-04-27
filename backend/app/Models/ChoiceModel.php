@@ -16,4 +16,12 @@ class ChoiceModel extends Model
         'letter',
         'description'
     ];
+
+    public function answer() {
+        return $this->hasOne(AnswerModel::class, 'choice_id', 'choice_id');
+    }
+
+    public function questions() {
+        return $this->belongsTo(QuestionModel::class, 'question_id', 'question_id');
+    }
 }

@@ -59,7 +59,7 @@ class CategoriesController extends Controller
     }
 
     public function get_category_with_questions() {
-        $get_categories = CategoryModel::with('questions', 'questions.choices')->get();
+        $get_categories = CategoryModel::with('questions', 'questions.choices', 'questions.answer', 'questions.answer.choice')->get();
 
         $this->response->status_code = 1;
         $this->response->message = "success";
