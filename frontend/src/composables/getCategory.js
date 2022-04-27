@@ -48,7 +48,7 @@ const getCategory = () => {
   }
 
   const nextCategoryWithQuestionsAnswer = async (url) => {
-    const categories = await axios.get(`${link}/api/get-category-with-questions-answer/${url}`, {
+    const categories = await axios.get(`${link}/api/get-category-with-questions-answer${url}`, {
       headers: {
         Authorization: `Bearer ${csvc.getUserAndToken('token')}`
       }

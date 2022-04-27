@@ -33,7 +33,7 @@ const getUserActivity = () => {
 
   const getNextActivity = async (url) => {
     try {
-      const getactivity = await axios.get(`${link}/api/get-user-activities/${url}`, {
+      const getactivity = await axios.get(`${link}/api/get-user-activities${url}`, {
         headers: {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }

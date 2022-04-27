@@ -82,7 +82,7 @@ export default {
     const next_users = async (url) => {
       isShowLoading.value = !isShowLoading.value
       try {
-        const getUserList = await axios.get(`${link}/api/user-list/${url}`, {
+        const getUserList = await axios.get(`${link}/api/user-list${url}`, {
           headers: {
               Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
