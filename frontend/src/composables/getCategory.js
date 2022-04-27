@@ -89,7 +89,7 @@ const getCategory = () => {
     return obj
   }
 
-  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded, filterUsedCategory, filterUnusedCategory, nextCategoryWithQuestionsAnswer }
+  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded, filterUsedCategory, filterUnusedCategory, nextCategoryWithQuestionsAnswer, pages }
 }
 
 export default getCategory
