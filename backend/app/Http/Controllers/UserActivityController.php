@@ -62,7 +62,7 @@ class UserActivityController extends Controller
         ->where('user_id', $request->user_id)->first();
 
         if (!$user) {
-            $user = User::with('role', 'following', 'followed', 'category', 'category.status')->where('user_id', $request->user_id)->first();
+            $user = User::with('role', 'following', 'following.followed_back', 'followed', 'followed.following', 'category', 'category.status')->where('user_id', $request->user_id)->first();
         }
 
         $user_activities = UserActivitiesModel::with('user', 'followed_by_user.following', 'category_by_user')
