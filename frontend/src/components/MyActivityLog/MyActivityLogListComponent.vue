@@ -6,7 +6,7 @@
           <div class="me-3">
             <div class="main-wrapper">
               <div class="sub-wrapper">
-                <img :src="'http://'+logs.user.avatar" width="70">
+                <img :src="'http://'+logs.user.avatar" onerror="this.onerror=null;this.src='https://dummyimage.com/200';" width="70">
               </div>
             </div>
           </div>
