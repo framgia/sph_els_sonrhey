@@ -44,6 +44,7 @@ const getCategory = () => {
   
     const response = await categories.data.data
     categoriesWithQuestion.value = response
+    isLoaded.value = true
   }
 
   const nextCategoryWithQuestionsAnswer = async (url) => {
@@ -70,7 +71,25 @@ const getCategory = () => {
     isLoaded.value = true
   }
 
-  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded, pages, nextCategoryWithQuestionsAnswer }
+  const filterUsedCategory = (arr, categoryList) => {
+    const filter = arr.filter(q => categoryList.map((t) => { 
+      return t.category_id
+    }).includes(q.category_id))
+
+    const obj = Object.assign({}, filter)
+    return obj
+  }
+
+  const filterUnusedCategory = (arr, categoryList) => {
+    const filter = arr.filter(q => !categoryList.map((t) => { 
+      return t.category_id
+    }).includes(q.category_id))
+
+    const obj = Object.assign({}, filter)
+    return obj
+  }
+
+  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded, filterUsedCategory, filterUnusedCategory, nextCategoryWithQuestionsAnswer }
 }
 
 export default getCategory
