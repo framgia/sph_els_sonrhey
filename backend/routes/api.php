@@ -24,7 +24,7 @@ use App\Http\Controllers\UserActivityController;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'cors'])->group(function () {
     Route::get('test', [AuthController::class, 'test_api']);
     Route::post('logout', [AuthController::class, 'logout']);
 
