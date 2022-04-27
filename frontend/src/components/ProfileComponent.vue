@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-6">
             <div class="d-grid mb-4">
-              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :disabled="buttonState">
+              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :disabled="buttonState" >
                 <span v-if="inputsState">Edit Info</span>
                 <span v-else>Cancel Edit</span>
               </button>
