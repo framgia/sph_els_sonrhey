@@ -5,7 +5,7 @@
         <div class="dashboard-list">
           <div class="main-wrapper">
             <div class="sub-wrapper text-center">
-                <img :src="'http://'+user.avatar" width="200">
+                <img :src="'http://'+user.avatar" onerror="this.onerror=null;this.src='https://dummyimage.com/200';" width="200">
                 <hr>
               <div>
                 <h3 class="fw-bold">{{ user.full_name }}</h3>
