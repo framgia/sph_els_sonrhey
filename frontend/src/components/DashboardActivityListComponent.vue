@@ -6,7 +6,7 @@
           <div class="me-3">
             <div class="main-wrapper">
               <div class="sub-wrapper">
-                <img :src="'http://'+userActivity.user.avatar" width="70">
+                <img :src="'http://'+userActivity.user.avatar" onerror="this.onerror=null;this.src='https://dummyimage.com/70';" width="70">
               </div>
             </div>
           </div>
@@ -32,7 +32,7 @@
           <div class="me-3">
             <div class="main-wrapper">
               <div class="sub-wrapper">
-                <img :src="'http://'+relationship.followed_back.avatar" width="70">
+                <img :src="'http://'+relationship.followed_back.avatar" onerror="this.onerror=null;this.src='https://dummyimage.com/70';" width="70">
               </div>
             </div>
           </div>

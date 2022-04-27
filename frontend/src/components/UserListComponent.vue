@@ -7,7 +7,7 @@
             <tbody>
               <tr>
                 <td>
-                  <img :src="`http://${user.avatar}`" width="70">
+                  <img :src="`http://${user.avatar}`" onerror="this.onerror=null;this.src='https://dummyimage.com/70';" width="70">
                 </td>
                 <td style="width: 3em">
                 </td>
