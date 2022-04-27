@@ -9,6 +9,7 @@ use App\Models\AnswerModel;
 use App\Models\ChoiceModel;
 use App\Models\StatusModel;
 use App\Models\CategoryUsedModel;
+use App\Models\ConstantVariablesModel;
 use App\Models\UserActivitiesModel;
 use Auth;
 use DB;
@@ -16,8 +17,10 @@ use DB;
 class AnswersController extends Controller
 {
     private $response;
+    private $lesson_statuses;
     public function __construct() {
         $this->response = new Response();
+        $this->lesson_statuses = new ConstantVariablesModel();
     }
     
     public function create_answer(Request $request) {
@@ -40,10 +43,11 @@ class AnswersController extends Controller
                         'choice_id' => $choice->choice_id
                     ])->first();
                     if ($check_answer) {
-                        $status = StatusModel::where('code', 'CRR')->first();
+
+                        $status = StatusModel::where('code', $this->lesson_statuses->correct)->first();
                         $status_id = $status->status_id;
                     } else {
-                        $status = StatusModel::where('code', 'IRR')->first();
+                        $status = StatusModel::where('code', $this->lesson_statuses->incorrect)->first();
                         $status_id = $status->status_id;
                     }
                 }
@@ -74,7 +78,7 @@ class AnswersController extends Controller
                 ]
             );
 
-            if ($request->answer_status === 'CMP') {
+            if ($request->answer_status === $this->lesson_statuses->completed) {
                 $user_activity = new UserActivitiesModel();
                 $user_activity->user_id = Auth::user()->user_id;
                 $user_activity->category_id = $create_answer->category_id;

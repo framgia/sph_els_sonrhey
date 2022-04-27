@@ -7,6 +7,8 @@ const getQuestions = () => {
   const csvc = commonService()
   const { link } = config()
   const questionList = ref()
+  const pages = ref([])
+  const isLoaded = ref(false)
 
   const fetchQuestions = async () => {
     const questions = await axios.get(`${link}/api/get-questions`, {
@@ -16,10 +18,25 @@ const getQuestions = () => {
     })  
   
     const response = await questions.data.data
-    questionList.value = response.filter(q => q.category != null)
+    isLoaded.value = true
+    pages.value = response.links
+    questionList.value = response.data.filter(q => q.category != null)
   }
 
-  return { fetchQuestions, questionList }
+  const getNextQuestion = async (url) => {
+    const questions = await axios.get(`${url}`, {
+      headers: {
+          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+      }
+    })  
+  
+    const response = await questions.data.data
+    isLoaded.value = true
+    pages.value = response.links
+    questionList.value = response.data.filter(q => q.category != null)
+  }
+
+  return { fetchQuestions, questionList, pages, isLoaded, getNextQuestion }
 }
 
 export default getQuestions

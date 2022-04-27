@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-6">
             <div class="d-grid mb-4">
-              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :disabled="buttonState">
+              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :disabled="buttonState" >
                 <span v-if="inputsState">Edit Info</span>
                 <span v-else>Cancel Edit</span>
               </button>
@@ -70,7 +70,7 @@
       </div>
     </div>
   </div>
-  <UserRelationshipComponent />
+  <UserRelationshipComponent @show="show"/>
 </template>
 
 <script>
@@ -189,8 +189,17 @@ export default {
       }
       return 0
     })
+
+    const show = () => {
+      csvc.message({
+        title: "Success!",
+        text: "Profile Updated Successfuly.",
+        icon: 'success'
+      })
+      location.reload()
+    }
     
-    return { user, inputsState, editPassword, full_name, editInfo, email_address, password, avatar, c_password, new_password, pickImage, editInputs, updateInfo, errorMessage, buttonState, followingCount, followersCount }
+    return { user, inputsState, editPassword, full_name, editInfo, email_address, password, avatar, c_password, new_password, pickImage, editInputs, updateInfo, errorMessage, buttonState, followingCount, followersCount, show }
   }
 }
 </script>

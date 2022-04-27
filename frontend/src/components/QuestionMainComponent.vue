@@ -19,6 +19,11 @@
                 <QuestionListComponent v-for="question in questionList" :key="question.question_id" :question="question" @actionLoader="actionLoader" />
               </tbody>
             </table>
+            <nav>
+              <ul class="pagination">
+                <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextQuestion(page.url)" v-html="page.label"></a></li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div> 
@@ -47,7 +52,7 @@ export default {
   },
   setup() {
     const isShowLoading = ref(false)
-    const { fetchQuestions, questionList } = getQuestions()
+    const { fetchQuestions, questionList, isLoaded, pages, getNextQuestion } = getQuestions()
 
     const actionLoader = () => {
       isShowLoading.value = !isShowLoading.value
@@ -57,8 +62,16 @@ export default {
       }
     }
 
+    const nextQuestion = async (url) => {
+      isShowLoading.value = !isShowLoading.value
+      const getNext = await getNextQuestion(url)
+      if (isLoaded.value) {
+        isShowLoading.value = !isShowLoading.value
+      }
+    }
+
     const fetch = fetchQuestions()
-    return { questionList, isShowLoading, actionLoader } 
+    return { questionList, isShowLoading, actionLoader, isLoaded, pages, nextQuestion } 
   }
 }
 </script>
