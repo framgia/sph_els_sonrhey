@@ -69,7 +69,7 @@ export default {
       try {
         const categories = await axios.get(`${link}/api/get-category-with-questions`, {
           headers: {
-              Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+            Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
         })
         const response = await categories.data.data

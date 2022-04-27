@@ -3,7 +3,7 @@
     <div class="card shadow login-card">
       <div class="card-body" style="padding: 1.5rem;">
         <div class="card-title border-bottom mb-4 text-center">
-          <img :src="'http://'+user.avatar" width="200" style="border-radius: 10em;">
+          <img :src="'http://'+user.avatar" onerror="this.onerror=null;this.src='https://dummyimage.com/200';" width="200" style="border-radius: 10em;">
           <div class="mb-3"></div>
             <span class="badge bg-warning me-2 p-learned"  data-bs-toggle="modal" data-bs-target="#followsModal" >{{ followersCount }} Followers</span>
             <span class="badge bg-primary p-finished"  data-bs-toggle="modal" data-bs-target="#followsModal" >{{ followingCount }} Following</span>
@@ -54,7 +54,7 @@
           </div>
           <div class="col-md-6">
             <div class="d-grid mb-4">
-              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :class="{'d-none' : buttonState}">
+              <button type="submit" class="btn btn-danger btn-lg"  @click="editInfo" :disabled="buttonState">
                 <span v-if="inputsState">Edit Info</span>
                 <span v-else>Cancel Edit</span>
               </button>
