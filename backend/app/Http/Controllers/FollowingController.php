@@ -69,7 +69,7 @@ class FollowingController extends Controller
         })
         ->where('user_id', '<>', $user_id)
         ->paginate(5);
-        $users->setPath(url()->current().'/');
+        $users->setPath('');
 
         $this->response->status_code = 1;
         $this->response->message = "success";

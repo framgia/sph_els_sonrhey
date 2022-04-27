@@ -33,7 +33,7 @@ const getUserActivity = () => {
 
   const getNextActivity = async (url) => {
     try {
-      const getactivity = await axios.get(`${url}`, {
+      const getactivity = await axios.get(`${link}/api/get-user-activities/${url}`, {
         headers: {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }
@@ -99,7 +99,7 @@ const getUserActivity = () => {
 
   const getMyNextActivityLog = async (url) => {
     try {
-      const myLogs = await axios.get(`${url}`, {
+      const myLogs = await axios.get(`${link}/api/get-my-activities/${url}`, {
         headers: {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }

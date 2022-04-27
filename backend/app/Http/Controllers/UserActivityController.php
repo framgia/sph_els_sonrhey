@@ -48,7 +48,7 @@ class UserActivityController extends Controller
         ->orWhereIn('user_relationship_id', $user_relationship_query)
         ->orderBy('user_activity_id', 'DESC')->paginate(5);
 
-        $user_activities->setPath(url()->current().'/');
+        $user_activities->setPath('');
 
         $this->response->status_code = 1;
         $this->response->message = 'success';
@@ -65,7 +65,7 @@ class UserActivityController extends Controller
         ->orderBy('user_activity_id', 'DESC')
         ->paginate(5);
 
-        $user_activities->setPath(url()->current().'/');
+        $user_activities->setPath('');
 
         $this->response->status_code = 1;
         $this->response->message = 'success';
@@ -102,7 +102,7 @@ class UserActivityController extends Controller
         ->orderBy('user_activity_id', 'DESC')
         ->paginate(5);
 
-        $user_activities->setPath(url()->current().'/');
+        $user_activities->setPath('');
 
         $this->response->status_code = 1;
         $this->response->message = 'success';
