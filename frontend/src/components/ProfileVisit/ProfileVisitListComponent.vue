@@ -36,7 +36,7 @@
           <div class="user-activity">
             <div class="main-wrapper">   
               <div class="sub-wrapper">
-                <h6><span class="fw-bold">{{ activity.user.full_name }}</span> follows <span class="fw-bold">{{ relationships.following.full_name }}</span></h6>
+                <h6><span class="fw-bold">{{ activity.user.full_name }}</span> follows <span class="fw-bold">{{ relationships }}</span></h6>
                 <p class="text-muted">{{ getDateTimeDifference(activity.created_at) }}</p>
               </div>
             </div>
@@ -50,11 +50,15 @@
 <script>
 import { computed } from 'vue'
 import getTimeDateYearDifference from '../../composables/getTimeDateDifference'
+import commonService from '../../composables/commonService'
 
 export default {
   name: 'ProfileVisitListComponent',
   props: ['activity'],
   setup(props) {
+    const { getUserAndToken } = commonService()
+    const userId = JSON.parse(getUserAndToken('user')).user_id
+
     const categoryUsed = computed(() => {
       const category_by_user = props.activity.category_by_user
       if (category_by_user) {
@@ -65,7 +69,10 @@ export default {
     const relationships = computed(() => {
       const followed_by_user = props.activity.followed_by_user
       if (followed_by_user) {
-        return followed_by_user
+        if (followed_by_user.following.user_id === userId) {
+          return 'You'
+        }
+        return followed_by_user.following.full_name
       }
     })
 
