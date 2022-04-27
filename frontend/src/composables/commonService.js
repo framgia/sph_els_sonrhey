@@ -43,7 +43,15 @@ const setterAndGetter = () => {
     })
   }
 
-  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser }
+  const setCategorySelected = (category) => {
+    localStorage.setItem('selectedCategory', JSON.stringify(category))
+  }
+
+  const getCategorySelected = () => {
+    return JSON.parse(localStorage.getItem('selectedCategory'))
+  }
+
+  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser, setCategorySelected, getCategorySelected }
 }
 
 export default setterAndGetter
