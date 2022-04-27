@@ -29,3 +29,7 @@ html, body, #app {
   margin: auto;
   border-radius: 10px;
 }
+
+.pagination {
+  justify-content: center;
+}

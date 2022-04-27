@@ -11,26 +11,35 @@
                 <div class="activity-list">
                   <MyActivityLogListComponent v-for="logs in myLogs" :key="logs.user_activity_id" :logs="logs"/>
                 </div>
+                <nav>
+                  <ul class="pagination">
+                    <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextActivity(page.url)" v-html="page.label"></a></li>
+                  </ul>
+                </nav>
               </div>
           </div>
         </div> 
       </div>
     </div>
   </div>
+  <Loader :class="{'d-none' : !isShowLoading}"/>
 </template>
 
 <script>
 import MyActivityLogListComponent from './MyActivityLogListComponent.vue'
 import getUserActivity from '../../composables/getUserActivity'
-import { computed } from 'vue'
+import Loader from '../../components/LoadingComponent.vue'
+import { computed, ref } from 'vue'
 
 export default {
   name: 'MyActivityLogComponent',
   components: {
-    MyActivityLogListComponent
+    MyActivityLogListComponent,
+    Loader
   },
   setup() {
-    const { myActivityLogs, getMyActivityLog, isLoaded } = getUserActivity()
+    const isShowLoading = ref(false)
+    const { myActivityLogs, getMyActivityLog, isLoaded, pages, getMyNextActivityLog } = getUserActivity()
     getMyActivityLog()
     const myLogs = computed(() => {
       if (isLoaded.value) {
@@ -38,7 +47,15 @@ export default {
       }
     })
 
-    return { myLogs }
+    const nextActivity = async (url) => {
+      isShowLoading.value = !isShowLoading.value
+      const myLog = await getMyNextActivityLog(url)
+      if (isLoaded.value) {
+        isShowLoading.value = !isShowLoading.value
+      }
+    }
+
+    return { myLogs, pages, isShowLoading, nextActivity }
   }
 }
 </script>

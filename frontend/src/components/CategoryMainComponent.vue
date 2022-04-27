@@ -23,6 +23,11 @@
                 </tr>
               </tbody>
             </table>
+            <nav>
+              <ul class="pagination">
+                <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextCategory(page.url)" v-html="page.label"></a></li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div> 
@@ -42,6 +47,7 @@ import CreateCategoryModal from '../components/Modals/CreateCategoryModal.vue'
 import EditCategoryModal from '../components/Modals/EditCategoryModal.vue'
 import config from '../composables/config'
 import Loader from '../components/LoadingComponent.vue'
+import getCategory from '../composables/getCategory'
 
 export default {
   name: 'CategoryMainComponent',
@@ -53,6 +59,7 @@ export default {
   },
   setup() {
     const isShowLoading = ref(false)
+    const { nextCategoryWithQuestionsAnswer, pages, categoriesWithQuestion } = getCategory()
     const csvc = commonService()
     const categoryList = ref([])
     const { link } = config()
@@ -67,21 +74,29 @@ export default {
 
     const getCategories = async () => {
       try {
-        const categories = await axios.get(`${link}/api/get-category-with-questions`, {
+        const categories = await axios.get(`${link}/api/get-category-with-questions-answer`, {
           headers: {
             Authorization: `Bearer ${csvc.getUserAndToken('token')}`
           }
         })
         const response = await categories.data.data
-        categoryList.value = response
+        pages.value = response.links
+        categoryList.value = response.data
       } catch(e) {
         console.error(e)
       }
     }
 
+    const nextCategory = async (url) => {
+      isShowLoading.value = !isShowLoading.value
+      const getNextCat = await nextCategoryWithQuestionsAnswer(url)
+      categoryList.value = categoriesWithQuestion.value
+      isShowLoading.value = !isShowLoading.value
+    }
+
     getCategories()
 
-    return { categoryList, isShowLoading, actionLoader }
+    return { categoryList, isShowLoading, actionLoader, pages, nextCategory }
   }
 }
 </script>

@@ -12,6 +12,7 @@ const getUserActivity = () => {
   const myLearningList = ref()
   const myActivityLogs = ref([])
   const myFollows = ref([])
+  const pages = ref([])
 
   const allUserActivity = async () => {
     try {
@@ -22,7 +23,25 @@ const getUserActivity = () => {
       })
 
       const response = await getactivity.data.data
-      allUserActivities.value = response
+      allUserActivities.value = response.data
+      pages.value = response.links
+      isLoaded.value = true
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  const getNextActivity = async (url) => {
+    try {
+      const getactivity = await axios.get(`${url}`, {
+        headers: {
+          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+        }
+      })
+
+      const response = await getactivity.data.data
+      allUserActivities.value = response.data
+      pages.value = response.links
       isLoaded.value = true
     } catch(e) {
       console.error(e)
@@ -70,7 +89,25 @@ const getUserActivity = () => {
       })
 
       const response = await myLogs.data.data
-      myActivityLogs.value = response
+      pages.value = response.links
+      myActivityLogs.value = response.data
+      isLoaded.value = true
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const getMyNextActivityLog = async (url) => {
+    try {
+      const myLogs = await axios.get(`${url}`, {
+        headers: {
+          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+        }
+      })
+
+      const response = await myLogs.data.data
+      pages.value = response.links
+      myActivityLogs.value = response.data
       isLoaded.value = true
     } catch (e) {
       console.error(e)
@@ -93,7 +130,7 @@ const getUserActivity = () => {
     }
   }
 
-  return { allUserActivities, allUserActivity, isLoaded, getVisitedUserActivity, visitedUserActivity, getMyLearnings, myLearningList, getMyActivityLog, myActivityLogs, getMyFollowers, myFollows }
+  return { allUserActivities, allUserActivity, isLoaded, getVisitedUserActivity, visitedUserActivity, getMyLearnings, myLearningList, getMyActivityLog, myActivityLogs, getMyFollowers, myFollows, pages, getNextActivity, getMyNextActivityLog }
 }
 
 export default getUserActivity

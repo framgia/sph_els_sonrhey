@@ -6,11 +6,16 @@
           <div class="dashboard-activity-title border-bottom">
             <h4>User Activities</h4>
           </div>
-            <div class="container mt-3">
-              <div class="activity-list">
-                <ProfileVisitListComponent v-for="activity in activities" :key="activity.user_activity_id" :activity="activity"/>
-              </div>
+          <div class="container mt-3">
+            <div class="activity-list">
+              <ProfileVisitListComponent v-for="activity in activities" :key="activity.user_activity_id" :activity="activity"/>
             </div>
+          </div>
+          <nav>
+            <ul class="pagination mt-3">
+              <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextActivity(page.url)" v-html="page.label"></a></li>
+            </ul>
+          </nav>
         </div>
       </div> 
     </div>
@@ -19,12 +24,41 @@
 
 <script>
 import ProfileVisitListComponent from './ProfileVisitListComponent.vue'
+import commonService from '../../composables/commonService'
+import { ref } from 'vue'
+import axios from 'axios'
 
 export default {
   name: 'ProfileVisitActivityComponent',
-  props: ['activities'],
+  props: ['activities', 'pages', 'user'],
   components: {
     ProfileVisitListComponent
+  },
+  setup(props, context) {
+    const csvc = commonService()
+    const pages = ref()
+    const activities = ref()
+    pages.value = props.pages
+    activities.value = props.activities
+
+    const nextActivity = async (url) => {
+      context.emit('actionLoader')
+      // isShowLoading.value = !isShowLoading.value
+      const userIn = {
+        "user_id" : props.user.user_id
+      }
+      const gActivity = await axios.post(`${url}`, userIn, {
+        headers: {
+          Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+        }
+      })
+      const response = await gActivity.data.data
+      pages.value = response.user_activity.links
+      activities.value = response.user_activity.data
+      context.emit('actionLoader')
+    }
+
+    return { nextActivity, pages, activities }
   }
 }
 </script>

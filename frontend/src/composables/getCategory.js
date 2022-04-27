@@ -11,6 +11,7 @@ const getCategory = () => {
   const categoriesWithQuestion = ref([])
   const categoriesUsed = ref([])
   const isLoaded = ref(false)
+  const pages = ref([])
 
   const fetchCategory = async () => {
     const categories = await axios.get(`${link}/api/get-category`, {
@@ -45,6 +46,18 @@ const getCategory = () => {
     categoriesWithQuestion.value = response
   }
 
+  const nextCategoryWithQuestionsAnswer = async (url) => {
+    const categories = await axios.get(`${url}`, {
+      headers: {
+        Authorization: `Bearer ${csvc.getUserAndToken('token')}`
+      }
+    })
+  
+    const response = await categories.data.data
+    pages.value = response.links
+    categoriesWithQuestion.value = response.data
+  }
+
   const getCategoriesUsed = async (userId) => {
     const categories = await axios.get(`${link}/api/get-categories-used/${userId}`, {
       headers: {
@@ -57,7 +70,7 @@ const getCategory = () => {
     isLoaded.value = true
   }
 
-  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded }
+  return { fetchCategory, categoriesList, selectedCategory, getCategoryWithQuestions, categoriesWithQuestion, getCategoriesUsed, categoriesUsed, isLoaded, pages, nextCategoryWithQuestionsAnswer }
 }
 
 export default getCategory
