@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryUsedModel;
+use App\Models\ConstantVariablesModel;
 use App\Models\UserActivitiesModel;
 use App\Models\ViewModels\Response;
 use Illuminate\Http\Request;
@@ -14,8 +15,10 @@ use App\Models\UserRelationshipModel;
 class UserActivityController extends Controller
 {
     private $response;
+    private $lesson_statuses;
     public function __construct() {
         $this->response = new Response();
+        $this->lesson_statuses = new ConstantVariablesModel();
     }
 
     public function get_user_activities() {
@@ -82,7 +85,7 @@ class UserActivityController extends Controller
     public function get_user_activities_by_user(Request $request) {
         $user = User::with('role', 'following', 'followed', 'category', 'category.status')
         ->whereHas('category.status', function($query) {
-            $query->where('code', 'CMP');
+            $query->where('code', $this->lesson_statuses->completed);
         })
         ->where('user_id', $request->user_id)->first();
 
@@ -109,11 +112,11 @@ class UserActivityController extends Controller
         $user_id = Auth::user()->user_id;
 
         $questions_answered = UserAnswerModel::with('status')->whereHas('status', function($query) {
-            $query->where('code', 'CRR');
+            $query->where('code', $this->lesson_statuses->correct);
         })->where('user_id', $user_id)->count();
 
         $categories_finished = CategoryUsedModel::with('status')->whereHas('status', function($query) {
-            $query->where('code', 'CMP');
+            $query->where('code', $this->lesson_statuses->completed);
         })->where('user_id', $user_id)->count();
 
         $this->response->status_code = 1;
