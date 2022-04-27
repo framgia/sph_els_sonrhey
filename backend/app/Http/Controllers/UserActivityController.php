@@ -46,7 +46,7 @@ class UserActivityController extends Controller
         ->orWhere('user_id', Auth::user()->user_id)
         ->orWhereIn('user_id', $category_used_query)
         ->orWhereIn('user_relationship_id', $user_relationship_query)
-        ->orderBy('user_activity_id', 'DESC')->get();
+        ->orderBy('user_activity_id', 'DESC')->paginate(5);
 
         $this->response->status_code = 1;
         $this->response->message = 'success';
@@ -61,7 +61,7 @@ class UserActivityController extends Controller
         $user_activities = UserActivitiesModel::with('user', 'followed_by_user.following', 'category')
         ->where('user_id', $user_id)
         ->orderBy('user_activity_id', 'DESC')
-        ->get();
+        ->paginate(5);
 
         $this->response->status_code = 1;
         $this->response->message = 'success';
@@ -96,7 +96,7 @@ class UserActivityController extends Controller
         $user_activities = UserActivitiesModel::with('user', 'followed_by_user.following', 'category_by_user')
         ->where('user_id', $request->user_id)
         ->orderBy('user_activity_id', 'DESC')
-        ->get();
+        ->paginate(5);
 
         $this->response->status_code = 1;
         $this->response->message = 'success';

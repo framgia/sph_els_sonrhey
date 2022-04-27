@@ -68,7 +68,7 @@ class FollowingController extends Controller
             $role->where('code', $this->constant->student);
         })
         ->where('user_id', '<>', $user_id)
-        ->get();
+        ->paginate(5);
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = $users;

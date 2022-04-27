@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('delete-category', [CategoriesController::class, 'delete_category']);
     Route::get('get-category', [CategoriesController::class, 'get_category']);
     Route::get('get-category-with-questions', [CategoriesController::class, 'get_category_with_questions']);
+    Route::get('get-category-with-questions-answer', [CategoriesController::class, 'get_category_with_questions_answer']);
     Route::get('get-categories-used/{id}', [CategoriesController::class, 'get_categories_used']);
 
     Route::post('create-questions', [QuestionsController::class, 'create_question']);

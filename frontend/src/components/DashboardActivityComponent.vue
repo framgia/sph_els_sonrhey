@@ -10,9 +10,14 @@
               <div class="activity-list">
                 <DashboardActivityListComponent v-for="userActivity in allUserActivities" :key="userActivity.user_activity_id" :userActivity="userActivity" @actionLoader="actionLoaderList"/>
               </div>
+              <nav>
+                <ul class="pagination">
+                  <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextActivity(page.url)" v-html="page.label"></a></li>
+                </ul>
+              </nav>
             </div>
         </div>
-      </div> 
+      </div>  
     </div>
   </div>
 </template>
@@ -28,12 +33,21 @@ export default {
   },
   emits: ['actionLoader'],
   setup(props, context) {
-    const { allUserActivities, allUserActivity } = getUserActivity()
+    const { allUserActivities, allUserActivity, pages, getNextActivity, isLoaded } = getUserActivity()
     const callUserActivity = allUserActivity()
     const actionLoaderList = () => {
       context.emit('actionLoader', true)
     }
-    return { allUserActivities, actionLoaderList }
+
+    const nextActivity = async (url) => {
+      context.emit('actionLoader', true)
+      const getnext = await getNextActivity(url)
+      if (isLoaded.value) {
+        context.emit('actionLoader', false)
+      }
+    }
+
+    return { allUserActivities, actionLoaderList, pages, nextActivity }
   }
 }
 </script>
@@ -46,5 +60,8 @@ export default {
 .dashboard-activity-list {
   color: white;
   vertical-align: middle;
+}
+.pagination {
+  justify-content: center;
 }
 </style>

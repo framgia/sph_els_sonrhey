@@ -60,7 +60,7 @@ class QuestionsController extends Controller
     }
 
     public function get_questions() {
-        $questions = QuestionModel::with('category', 'answer', 'answer.choice', 'choices')->get();
+        $questions = QuestionModel::with('category', 'answer', 'answer.choice', 'choices')->paginate(5);
         $this->response->status_code = 1;
         $this->response->message = "success";
         $this->response->data = $questions;
