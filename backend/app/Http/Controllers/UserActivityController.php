@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
 use App\Models\UserAnswerModel;
+use App\Models\UserRelationshipModel;
 
 class UserActivityController extends Controller
 {
@@ -18,7 +19,31 @@ class UserActivityController extends Controller
     }
 
     public function get_user_activities() {
-        $user_activities = UserActivitiesModel::with('user', 'user_relationship', 'user_relationship.following', 'user_relationship.followed_back', 'category')->orderBy('user_activity_id', 'DESC')->get();
+        $user_relationship_query = [];
+        $category_used_query = [];
+
+        $user_relationship = UserRelationshipModel::orWhere([
+            "following_id" => Auth::user()->user_id,
+            "followed_id" => Auth::user()->user_id
+            ])
+        ->get(['user_relationship_id', 'following_id', 'followed_id']);
+
+        if (count($user_relationship)) {
+            $user_relationship_query = $user_relationship->pluck('user_relationship_id')->all();
+            
+            $other_user_id_following = $user_relationship->pluck('following_id')->all();
+            $other_user_id_followed = $user_relationship->pluck('followed_id')->all();
+
+            $category_used = CategoryUsedModel::whereIn('user_id', $other_user_id_following)->whereIn('user_id', $other_user_id_followed)->get(['user_id']);
+
+            $category_used_query = $category_used->pluck('user_id')->all();
+        }
+
+        $user_activities = UserActivitiesModel::with('user', 'user_relationship', 'user_relationship.following', 'user_relationship.followed_back', 'category')
+        ->orWhere('user_id', Auth::user()->user_id)
+        ->orWhereIn('user_id', $category_used_query)
+        ->orWhereIn('user_relationship_id', $user_relationship_query)
+        ->orderBy('user_activity_id', 'DESC')->get();
 
         $this->response->status_code = 1;
         $this->response->message = 'success';
