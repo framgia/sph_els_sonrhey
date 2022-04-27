@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ConstantVariablesModel;
 use Illuminate\Http\Request;
 use App\Models\ViewModels\Response;
 use App\Models\UserRelationshipModel;
@@ -13,8 +14,10 @@ use App\Models\UserActivitiesModel;
 class FollowingController extends Controller
 {
     private $response;
+    private $constant;
     public function __construct() {
         $this->response = new Response();
+        $this->constant = new ConstantVariablesModel();
     }
 
     public function get_user_relationship() {
@@ -62,7 +65,7 @@ class FollowingController extends Controller
     public function user_list() {
         $user_id = Auth::user()->user_id;
         $users = User::with('following', 'followed')->whereHas('role', function ($role) {
-            $role->where('code', 'STD');
+            $role->where('code', $this->constant->student);
         })
         ->where('user_id', '<>', $user_id)
         ->get();
