@@ -61,7 +61,7 @@ class QuestionsController extends Controller
 
     public function get_questions() {
         $questions = QuestionModel::with('category', 'answer', 'answer.choice', 'choices')->paginate(5);
-        $questions->setPath(url()->current().'/');
+        $questions->setPath('');
         
         $this->response->status_code = 1;
         $this->response->message = "success";

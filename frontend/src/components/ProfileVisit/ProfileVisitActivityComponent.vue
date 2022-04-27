@@ -27,6 +27,7 @@ import ProfileVisitListComponent from './ProfileVisitListComponent.vue'
 import commonService from '../../composables/commonService'
 import { ref } from 'vue'
 import axios from 'axios'
+import config from '../../composables/config'
 
 export default {
   name: 'ProfileVisitActivityComponent',
@@ -38,16 +39,16 @@ export default {
     const csvc = commonService()
     const pages = ref()
     const activities = ref()
+    const { link } = config()
     pages.value = props.pages
     activities.value = props.activities
 
     const nextActivity = async (url) => {
       context.emit('actionLoader')
-      // isShowLoading.value = !isShowLoading.value
       const userIn = {
         "user_id" : props.user.user_id
       }
-      const gActivity = await axios.post(`${url}`, userIn, {
+      const gActivity = await axios.post(`${link}/api/get-user-activities-by-user/${url}`, userIn, {
         headers: {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }

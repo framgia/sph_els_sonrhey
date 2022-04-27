@@ -71,7 +71,7 @@ class CategoriesController extends Controller
     public function get_category_with_questions_answer() {
         $get_categories = CategoryModel::with('questions', 'questions.choices', 'questions.answer', 'questions.answer.choice')->paginate(5);
 
-        $get_categories->setPath(url()->current().'/');
+        $get_categories->setPath('');
 
         $this->response->status_code = 1;
         $this->response->message = "success";
