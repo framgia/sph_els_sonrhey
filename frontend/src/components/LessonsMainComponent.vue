@@ -2,7 +2,7 @@
   <div class="mt-4">
     <div class="card shadow lesson-card">
       <div class="card-body" style="padding: 1.5rem;">   
-        <div class="col-md-4 mb-3" v-if="categories.length">
+        <div class="col-md-4 mb-3">
           <h5>Filter by Status</h5>
           <select class="form-select" aria-label="Default select example" @change="selectStatus">
             <option :value="completed">Completed</option>
@@ -63,7 +63,11 @@ export default {
 
     const checkLessons = computed(() => {
       if (isLoaded.value && !categories.value.length) {
-        return 'No lessons available.'
+        const objCount = Object.keys(categories.value).length
+        if (objCount === 0) {
+          return 'No lessons available.'
+        }
+        return
       }
       return 'Data still loading.'
     })
