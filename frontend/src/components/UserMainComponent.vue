@@ -5,7 +5,7 @@
         <div class="card-title mb-4 text-center">
           <div class="mb-3"></div>
           <div class="mb-4"></div>
-          <div class="form-group mb-4">
+          <div class="form-group mb-4" v-if="userList.length">
             <input type="text" class="form-control search-user" placeholder="Search User" @keyup="search">
           </div>
           <div class="alert alert-success alert-dismissible fade show" :class="{'d-none' : !alertButton}" role="alert">
@@ -14,9 +14,12 @@
           </div>
           <div class="user-list">
             <UserListComponent v-for="user in userList" :user="user" :key="user.user_id" @show="show"/>
+            <div v-if="!userList.length">
+              {{ checkUsers }}
+            </div>
           </div>
           <nav>
-            <ul class="pagination">
+            <ul class="pagination" :class="{'d-none' : total <= paginationTotal}">
               <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="next_users(page.url)" v-html="page.label"></a></li>
             </ul>
           </nav>
@@ -29,7 +32,7 @@
 
 <script>
 import axios from 'axios'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import UserListComponent from '../components/UserListComponent.vue'
 import commonService from '../composables/commonService'
 import config from '../composables/config'
@@ -44,13 +47,16 @@ export default {
   setup() {
     const isShowLoading = ref(false)
     const csvc = commonService()
+    const paginationTotal = csvc.paginationTotal
     const { link } = config()
-    const userList = ref()
+    const userList = ref([])
     const alertButton = ref(false)
     const hideAlert = ref(false)
     const alertMessage = ref('')
     const oldUser = ref([])
     const pages = ref([])
+    const isLoaded = ref(false)
+    const total = ref(0)
 
     const close_alert = () => {
       hideAlert.value = !hideAlert.value
@@ -72,8 +78,10 @@ export default {
         })
         const response = await getUserList.data.data
         pages.value = response.links
+        total.value = response.total
         oldUser.value = response.data
         userList.value = oldUser.value
+        isLoaded.value = true
       } catch(e) {
         console.error(e)
       }
@@ -103,14 +111,21 @@ export default {
       userList.value = oldUser.value.filter(q => q.full_name.toLowerCase().includes(e.target.value.toLowerCase()))
     }
 
-    return { userList, show, alertButton, close_alert, hideAlert, alertMessage, search, pages, next_users, isShowLoading }
+    const checkUsers = computed(() => {
+      if (isLoaded.value && !userList.value.length) {
+        return 'No users available.'
+      }
+      return 'Data still Loading.'
+    })
+
+    return { userList, show, alertButton, close_alert, hideAlert, alertMessage, search, pages, next_users, isShowLoading, paginationTotal, checkUsers, total }
   }
 }
 </script>
 
 <style scoped>
 .login-card {
-  width: 35rem !important;
+  width: 45rem !important;
 }
 .user-list {
   color:white;

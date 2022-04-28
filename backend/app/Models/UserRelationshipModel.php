@@ -23,4 +23,8 @@ class UserRelationshipModel extends Model
     public function followed_back() {
         return $this->belongsTo(User::class, 'followed_id', 'user_id');
     }
+
+    public function user_activity() {
+        return $this->hasOne(UserActivitiesModel::class, 'user_relationship_id', 'user_relationship_id');
+    }
 }

@@ -17,10 +17,13 @@
               </thead>
               <tbody>
                 <QuestionListComponent v-for="question in questionList" :key="question.question_id" :question="question" @actionLoader="actionLoader" />
+                <tr v-if="!questionList.length">
+                  <td colspan="4">{{ checkQuestions }}</td>
+                </tr>
               </tbody>
             </table>
             <nav>
-              <ul class="pagination">
+              <ul class="pagination" :class="{'d-none' : total <= paginationTotal}">
                 <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextQuestion(page.url)" v-html="page.label"></a></li>
               </ul>
             </nav>
@@ -40,7 +43,8 @@ import QuestionListComponent from '../components/QuestionListComponent.vue'
 import getQuestions from '../composables/getQuestions'
 import EditQuestionModal from '../components/Modals/EditQuestionModal.vue'
 import Loader from '../components/LoadingComponent.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import commonService from '../composables/commonService'
 
 export default {
   name: 'QuestionsMainComponent',
@@ -52,7 +56,8 @@ export default {
   },
   setup() {
     const isShowLoading = ref(false)
-    const { fetchQuestions, questionList, isLoaded, pages, getNextQuestion } = getQuestions()
+    const { paginationTotal } = commonService()
+    const { fetchQuestions, questionList, isLoaded, pages, getNextQuestion, total } = getQuestions()
 
     const actionLoader = () => {
       isShowLoading.value = !isShowLoading.value
@@ -71,7 +76,15 @@ export default {
     }
 
     const fetch = fetchQuestions()
-    return { questionList, isShowLoading, actionLoader, isLoaded, pages, nextQuestion } 
+
+    const checkQuestions = computed(() => {
+      if (isLoaded.value && !questionList.value.length) {
+        return 'No questions yet.'
+      }
+      return 'Data still loading.'
+    })
+    
+    return { questionList, isShowLoading, actionLoader, isLoaded, pages, nextQuestion, total, checkQuestions, paginationTotal } 
   }
 }
 </script>

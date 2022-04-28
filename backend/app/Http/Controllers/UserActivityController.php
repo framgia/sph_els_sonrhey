@@ -24,6 +24,8 @@ class UserActivityController extends Controller
     public function get_user_activities() {
         $user_relationship_query = [];
         $category_used_query = [];
+        $user_relationship_query_following = [];
+        $category_used_query_following = [];
 
         $user_relationship = UserRelationshipModel::orWhere([
             "following_id" => Auth::user()->user_id,
@@ -32,14 +34,32 @@ class UserActivityController extends Controller
         ->get(['user_relationship_id', 'following_id', 'followed_id']);
 
         if (count($user_relationship)) {
-            $user_relationship_query = $user_relationship->pluck('user_relationship_id')->all();
+            $user_relationship_query_temp = $user_relationship->pluck('user_relationship_id')->all();
             
             $other_user_id_following = $user_relationship->pluck('following_id')->all();
             $other_user_id_followed = $user_relationship->pluck('followed_id')->all();
 
             $category_used = CategoryUsedModel::whereIn('user_id', $other_user_id_following)->whereIn('user_id', $other_user_id_followed)->get(['user_id']);
 
-            $category_used_query = $category_used->pluck('user_id')->all();
+            $category_used_query_temp = $category_used->pluck('user_id')->all();
+
+            $check_followings = UserRelationshipModel::where('followed_id', Auth::user()->user_id)->get(['user_relationship_id', 'following_id']);
+
+            if (count($check_followings)) {
+                $my_followings = $check_followings->pluck('following_id')->all();
+
+                $my_followings_user_relationship = UserRelationshipModel::whereIn('followed_id', $my_followings)->get(['user_relationship_id']);
+                $my_followings_relationship =  $my_followings_user_relationship->pluck('user_relationship_id')->all();
+
+                $my_followings_category_used = CategoryUsedModel::whereIn('user_id', $my_followings)->get(['user_id']);
+                $my_followings_category =  $my_followings_category_used->pluck('user_id')->all();
+                
+                $user_relationship_query_following = $my_followings_relationship;
+                $category_used_query_following = $my_followings_category;
+            }
+
+            $user_relationship_query = array_merge($user_relationship_query_temp, $user_relationship_query_following);
+            $category_used_query = array_merge($category_used_query_temp, $category_used_query_following);
         }
 
         $user_activities = UserActivitiesModel::with('user', 'user_relationship', 'user_relationship.following', 'user_relationship.followed_back', 'category')

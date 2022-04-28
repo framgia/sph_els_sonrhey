@@ -2,7 +2,7 @@
   <div class="mt-4">
     <div class="card shadow lesson-card">
       <div class="card-body" style="padding: 1.5rem;">   
-        <div class="col-md-4 mb-3">
+        <div class="col-md-4 mb-3" v-if="categories.length">
           <h5>Filter by Status</h5>
           <select class="form-select" aria-label="Default select example" @change="selectStatus">
             <option :value="completed">Completed</option>
@@ -14,6 +14,9 @@
         <div class="lesson-list">
           <LessonsListComponent v-for="category in categories" :key="category.category_id" :category="category" />
         </div>
+        <div class="m4-3 text-center" v-if="!categories.length">
+          {{ checkLessons }}
+        </div>
       </div> 
     </div>
   </div>
@@ -24,7 +27,7 @@ import LessonsListComponent from '../components/LessonsListComponent.vue'
 import getCategory from '../composables/getCategory'
 import commonService from '../composables/commonService'
 import quizStatuses from '../composables/quizStatuses'
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 
 export default {
   name: 'LessonsMainComponent',
@@ -38,7 +41,7 @@ export default {
     const userId = JSON.parse(getUserAndToken('user')).user_id
     const getCategories = getCategoryWithQuestions()
     const getCatUsed = getCategoriesUsed(userId)
-    const categories = ref()
+    const categories = ref([])
 
     watchEffect(() => {
       if (isLoaded.value) {
@@ -58,7 +61,14 @@ export default {
       }
     }
 
-    return { categories, defaultStatus, inProgress, completed, selectStatus, displayAll }
+    const checkLessons = computed(() => {
+      if (isLoaded.value && !categories.value.length) {
+        return 'No lessons available.'
+      }
+      return 'Data still loading.'
+    })
+
+    return { categories, defaultStatus, inProgress, completed, selectStatus, displayAll, checkLessons }
   }
 }
 </script>

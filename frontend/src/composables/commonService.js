@@ -1,6 +1,8 @@
 import Swal from 'sweetalert2'
 
 const setterAndGetter = () => {
+  const paginationTotal = 5
+
   const setUserAndToken = (user, token) => {
     localStorage.setItem('user', JSON.stringify(user))
     localStorage.setItem('token', token)
@@ -51,7 +53,7 @@ const setterAndGetter = () => {
     return JSON.parse(localStorage.getItem('selectedCategory'))
   }
 
-  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser, setCategorySelected, getCategorySelected }
+  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser, setCategorySelected, getCategorySelected, paginationTotal }
 }
 
 export default setterAndGetter

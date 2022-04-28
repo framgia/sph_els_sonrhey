@@ -39,7 +39,9 @@ class CategoriesController extends Controller
     }
 
     public function delete_category(Request $request) {
-        $create_category = CategoryModel::destroy($request->category_id);
+        $delete_category = CategoryModel::find($request->category_id);
+        $delete_category->questions()->delete();
+        $delete_category->delete();
 
         $this->response->status_code = 1;
         $this->response->message = "success";

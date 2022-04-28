@@ -11,8 +11,12 @@
                 <div class="activity-list">
                   <MyActivityLogListComponent v-for="logs in myLogs" :key="logs.user_activity_id" :logs="logs"/>
                 </div>
+                <div class="text-center mt-3" v-if="!myActivityLogs.length">
+                  <br>
+                  {{ checkMyActivities }}
+                </div>
                 <nav>
-                  <ul class="pagination">
+                  <ul class="pagination" :class="{'d-none' : total <= paginationTotal}">
                     <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextActivity(page.url)" v-html="page.label"></a></li>
                   </ul>
                 </nav>
@@ -30,6 +34,7 @@ import MyActivityLogListComponent from './MyActivityLogListComponent.vue'
 import getUserActivity from '../../composables/getUserActivity'
 import Loader from '../../components/LoadingComponent.vue'
 import { computed, ref } from 'vue'
+import commonService from '../../composables/commonService'
 
 export default {
   name: 'MyActivityLogComponent',
@@ -38,8 +43,9 @@ export default {
     Loader
   },
   setup() {
+    const { paginationTotal } = commonService()
     const isShowLoading = ref(false)
-    const { myActivityLogs, getMyActivityLog, isLoaded, pages, getMyNextActivityLog } = getUserActivity()
+    const { myActivityLogs, getMyActivityLog, isLoaded, pages, getMyNextActivityLog, total } = getUserActivity()
     getMyActivityLog()
     const myLogs = computed(() => {
       if (isLoaded.value) {
@@ -55,7 +61,14 @@ export default {
       }
     }
 
-    return { myLogs, pages, isShowLoading, nextActivity }
+    const checkMyActivities = computed(() => {
+      if (isLoaded.value && !myActivityLogs.value.length) {
+        return "Your activities is empty."
+      }
+      return "Data still loading."
+    })
+
+    return { myLogs, pages, isShowLoading, nextActivity, total, paginationTotal, checkMyActivities, myActivityLogs }
   }
 }
 </script>

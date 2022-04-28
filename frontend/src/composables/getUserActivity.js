@@ -13,6 +13,7 @@ const getUserActivity = () => {
   const myActivityLogs = ref([])
   const myFollows = ref([])
   const pages = ref([])
+  const total = ref(0)
 
   const allUserActivity = async () => {
     try {
@@ -25,6 +26,7 @@ const getUserActivity = () => {
       const response = await getactivity.data.data
       allUserActivities.value = response.data
       pages.value = response.links
+      total.value = response.total
       isLoaded.value = true
     } catch(e) {
       console.error(e)
@@ -90,6 +92,7 @@ const getUserActivity = () => {
 
       const response = await myLogs.data.data
       pages.value = response.links
+      total.value = response.total
       myActivityLogs.value = response.data
       isLoaded.value = true
     } catch (e) {
@@ -130,7 +133,7 @@ const getUserActivity = () => {
     }
   }
 
-  return { allUserActivities, allUserActivity, isLoaded, getVisitedUserActivity, visitedUserActivity, getMyLearnings, myLearningList, getMyActivityLog, myActivityLogs, getMyFollowers, myFollows, pages, getNextActivity, getMyNextActivityLog }
+  return { allUserActivities, allUserActivity, isLoaded, getVisitedUserActivity, visitedUserActivity, getMyLearnings, myLearningList, getMyActivityLog, myActivityLogs, getMyFollowers, myFollows, pages, getNextActivity, getMyNextActivityLog, total }
 }
 
 export default getUserActivity
