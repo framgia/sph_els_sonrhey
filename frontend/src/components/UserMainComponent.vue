@@ -5,7 +5,7 @@
         <div class="card-title mb-4 text-center">
           <div class="mb-3"></div>
           <div class="mb-4"></div>
-          <div class="form-group mb-4" v-if="userList.length">
+          <div class="form-group mb-4">
             <input type="text" class="form-control search-user" placeholder="Search User" @keyup="search">
           </div>
           <div class="alert alert-success alert-dismissible fade show" :class="{'d-none' : !alertButton}" role="alert">
@@ -14,12 +14,12 @@
           </div>
           <div class="user-list">
             <UserListComponent v-for="user in userList" :user="user" :key="user.user_id" @show="show"/>
-            <div v-if="!userList.length">
+            <div v-if="!userList.length" class="mb-3">
               {{ checkUsers }}
             </div>
           </div>
           <nav>
-            <ul class="pagination" :class="{'d-none' : total <= paginationTotal}">
+            <ul class="pagination" :class="{'d-none' : total <= paginationTotal, 'd-none' : !userList.length}">
               <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="next_users(page.url)" v-html="page.label"></a></li>
             </ul>
           </nav>
