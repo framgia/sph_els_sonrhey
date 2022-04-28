@@ -10,9 +10,12 @@
             <div class="activity-list">
               <ProfileVisitListComponent v-for="activity in activities" :key="activity.user_activity_id" :activity="activity"/>
             </div>
+            <div v-if="!activities.length" class="text-center">
+              No user activities yet.
+            </div>
           </div>
           <nav>
-            <ul class="pagination mt-3">
+            <ul class="pagination mt-3" :class="{'d-none' : total <= paginationTotal}">
               <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextActivity(page.url)" v-html="page.label"></a></li>
             </ul>
           </nav>
@@ -31,7 +34,7 @@ import config from '../../composables/config'
 
 export default {
   name: 'ProfileVisitActivityComponent',
-  props: ['activities', 'pages', 'user'],
+  props: ['activities', 'pages', 'user', 'total'],
   components: {
     ProfileVisitListComponent
   },
@@ -40,6 +43,7 @@ export default {
     const pages = ref()
     const activities = ref()
     const { link } = config()
+    const paginationTotal = csvc.paginationTotal
     pages.value = props.pages
     activities.value = props.activities
 
@@ -59,7 +63,7 @@ export default {
       context.emit('actionLoader')
     }
 
-    return { nextActivity, pages, activities }
+    return { nextActivity, pages, activities, paginationTotal }
   }
 }
 </script>

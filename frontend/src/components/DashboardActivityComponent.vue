@@ -10,7 +10,10 @@
               <div class="activity-list">
                 <DashboardActivityListComponent v-for="userActivity in allUserActivities" :key="userActivity.user_activity_id" :userActivity="userActivity" @actionLoader="actionLoaderList"/>
               </div>
-              <nav>
+              <div v-if="!allUserActivities.length" class="text-center">
+                {{ checkActivities }}
+              </div>
+              <nav :class="{'d-none' : total <= paginationTotal}">
                 <ul class="pagination">
                   <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextActivity(page.url)" v-html="page.label"></a></li>
                 </ul>
@@ -25,6 +28,8 @@
 <script>
 import DashboardActivityListComponent from '../components/DashboardActivityListComponent.vue'
 import getUserActivity from '../composables/getUserActivity'
+import { computed } from 'vue'
+import commonService from '../composables/commonService'
 
 export default {
   name: 'DashboardActivityComponent',
@@ -33,7 +38,8 @@ export default {
   },
   emits: ['actionLoader'],
   setup(props, context) {
-    const { allUserActivities, allUserActivity, pages, getNextActivity, isLoaded } = getUserActivity()
+    const { allUserActivities, allUserActivity, pages, getNextActivity, isLoaded, total } = getUserActivity()
+    const { paginationTotal } = commonService()
     const callUserActivity = allUserActivity()
     const actionLoaderList = () => {
       context.emit('actionLoader', true)
@@ -47,7 +53,14 @@ export default {
       }
     }
 
-    return { allUserActivities, actionLoaderList, pages, nextActivity }
+    const checkActivities = computed(() => {
+      if (isLoaded.value && !allUserActivities.value.length) {
+        return 'No user activities yet.'
+      }
+      return 'Data is still loading.'
+    })
+
+    return { allUserActivities, actionLoaderList, pages, nextActivity, total, checkActivities, paginationTotal }
   }
 }
 </script>

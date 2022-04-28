@@ -79,14 +79,22 @@ class FollowingController extends Controller
     }
 
     public function unfollow(Request $request) {
-        $unfollow = UserRelationshipModel::where([
-          'followed_id' => $request->followed_id,
-          'following_id' => $request->following_id
-        ])->delete();
-
-        $this->response->status_code = 1;
-        $this->response->message = "success";
-        $this->response->data = "Unfollowed Succesfully!";
+        try {
+            $unfollow = UserRelationshipModel::where([
+            'followed_id' => $request->followed_id,
+            'following_id' => $request->following_id
+            ])->first();
+                
+            $unfollow->user_activity()->delete();
+            $unfollow->delete();
+    
+            $this->response->status_code = 1;
+            $this->response->message = "success";
+            $this->response->data = "Unfollowed Successfuly!";
+        } catch(\Exception $ex) {
+            $this->response->status_code = 0;
+            $this->response->message = $ex;
+        }
 
         return response()->json($this->response);
     }

@@ -83,7 +83,7 @@ export default {
         const response = await unfollow.data.data
         context.emit('show', response)
       } catch(e) {
-        console.error(e)
+        console.error(e.message)
       }
     }
     
