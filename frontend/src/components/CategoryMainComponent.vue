@@ -19,12 +19,12 @@
               <tbody>
                 <CategoryListComponent v-for="category in categoryList" :category="category" :key="category.category_id" @actionLoader="actionLoader"/>
                 <tr v-if="!categoryList.length">
-                  <td colspan="5">Data still loading ...</td>
+                  <td colspan="5">{{ checkCategories }}</td>
                 </tr>
               </tbody>
             </table>
             <nav>
-              <ul class="pagination">
+              <ul class="pagination" :class="{'d-none' : total <= paginationTotal}">
                 <li class="page-item" :class="{'disabled' : page.active || page.url == null}" v-for="page in pages" :key="page.label"><a class="page-link" href="#" @click="nextCategory(page.url)" v-html="page.label"></a></li>
               </ul>
             </nav>
@@ -40,7 +40,7 @@
 
 <script>
 import axios from 'axios'
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import commonService from '../composables/commonService'
 import CategoryListComponent from '../components/CategoryListComponent.vue'
 import CreateCategoryModal from '../components/Modals/CreateCategoryModal.vue'
@@ -59,10 +59,12 @@ export default {
   },
   setup() {
     const isShowLoading = ref(false)
-    const { nextCategoryWithQuestionsAnswer, pages, categoriesWithQuestion } = getCategory()
+    const { nextCategoryWithQuestionsAnswer, pages, categoriesWithQuestion, isLoaded } = getCategory()
     const csvc = commonService()
     const categoryList = ref([])
     const { link } = config()
+    const total = ref(0)
+    const paginationTotal = csvc.paginationTotal
     
     const actionLoader = () => {
       isShowLoading.value = !isShowLoading.value
@@ -81,7 +83,9 @@ export default {
         })
         const response = await categories.data.data
         pages.value = response.links
+        total.value = response.total
         categoryList.value = response.data
+        isLoaded.value = true
       } catch(e) {
         console.error(e)
       }
@@ -96,7 +100,14 @@ export default {
 
     getCategories()
 
-    return { categoryList, isShowLoading, actionLoader, pages, nextCategory }
+    const checkCategories = computed(() => {
+      if (isLoaded.value && !categoryList.value.length) {
+        return 'No categories yet.'
+      }
+      return 'Data still Loading.'
+    })
+
+    return { categoryList, isShowLoading, actionLoader, pages, nextCategory, checkCategories, total, paginationTotal }
   }
 }
 </script>
