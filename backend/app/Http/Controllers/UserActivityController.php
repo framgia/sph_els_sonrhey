@@ -107,7 +107,7 @@ class UserActivityController extends Controller
     }
 
     public function get_user_activities_by_user(Request $request) {
-        $user = User::with('role', 'following', 'followed', 'category', 'category.status')
+        $user = User::with('role', 'following', 'following.followed_back', 'followed', 'followed.following', 'category.status')
         ->whereHas('category.status', function($query) {
             $query->where('code', $this->lesson_statuses->completed);
         })
