@@ -20,11 +20,17 @@
             </div>
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="following-tab">
               <div class="following-list mt-3">
+                <div v-if="!following.length" class="text-center">
+                  User has no followings.
+                </div>
                 <UserVisitFollowingComponent v-for="follow in following" :key="follow.user_relationship_id" :follow="follow" @showMessage="showMessage"/>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="followers-tab">
               <div class="followers-list mt-3">
+                <div v-if="!followers.length" class="text-center">
+                  User has no followers.
+                </div>
                 <UserVisitFollowerComponent v-for="follow in followers" :key="follow.user_relationship_id" :follow="follow" @showMessage="showMessage"/>
               </div>
             </div>

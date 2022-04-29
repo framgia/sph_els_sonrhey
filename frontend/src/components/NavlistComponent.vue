@@ -18,12 +18,12 @@
             <a class="nav-link" aria-current="page" href="/questions">Questions</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" aria-current="page" to="/users">Users</router-link>
+            <a class="nav-link" aria-current="page" href="/users">Users</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
             <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-              <li><router-link class="dropdown-item" to="/profile">Profile</router-link></li>
+              <li><a class="dropdown-item" href="/profile">Profile</a></li>
               <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
             </ul>
           </li>

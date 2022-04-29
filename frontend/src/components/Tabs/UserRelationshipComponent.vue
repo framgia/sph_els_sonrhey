@@ -14,11 +14,17 @@
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="following-tab">
               <div class="following-list mt-3">
+                  <div v-if="!following.length" class="text-center">
+                    You have no followings.
+                  </div>
                   <FollowingListComponent v-for="follow in following" :key="follow.user_relationship_id" :follow="follow" @show="showLoad"/>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="followers-tab">
               <div class="followers-list mt-3">
+                <div v-if="!followers.length" class="text-center">
+                  You have no followers.
+                </div>
                 <FollowersListComponent v-for="follow in followers" :key="follow.user_relationship_id" :follow="follow" @show="showLoad"/>
               </div>
             </div>
@@ -43,8 +49,8 @@ export default {
   },
   emits: ['show'],
   setup(props, context) {
-    const following = ref()
-    const followers = ref()
+    const following = ref([])
+    const followers = ref([])
 
     watchEffect(() => {
       if (store.state.following.length) {
