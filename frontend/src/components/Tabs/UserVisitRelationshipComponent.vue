@@ -1,6 +1,6 @@
 <template>
   <div class="modal" tabindex="-1" ref="res" id="followsModal" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content" style="background: #2d3748;">
         <div class="modal-body">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -13,22 +13,14 @@
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="following-tab">
-              <table class="table mt-4">
-                <tbody>
-                  <tr v-for="follow in following" :key="follow.user_relationship_id">
-                    <td>{{ follow.following.full_name }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="following-list mt-3">
+                <UserVisitFollowingComponent v-for="follow in following" :key="follow.user_relationship_id" :follow="follow"/>
+              </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="followers-tab">
-              <table class="table mt-4">
-                <tbody>
-                  <tr v-for="follow in followers" :key="follow.user_relationship_id">
-                    <td>{{ follow.followed_back.full_name }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="followers-list mt-3">
+                <UserVisitFollowerComponent v-for="follow in followers" :key="follow.user_relationship_id" :follow="follow"/>
+              </div>
             </div>
           </div>
         </div>
@@ -40,8 +32,14 @@
 <script>
 import store from '@/store'
 import { ref, watchEffect } from 'vue'
+import UserVisitFollowingComponent from './UserVisitFollowingComponent.vue'
+import UserVisitFollowerComponent from './UserVisitFollowerComponent.vue'
 export default {
   name: 'UserRelationshipComponent',
+  components: {
+    UserVisitFollowingComponent,
+    UserVisitFollowerComponent
+  },
   setup(props, context) {
     const following = ref()
     const followers = ref()
