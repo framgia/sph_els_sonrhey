@@ -60,8 +60,8 @@ export default {
   },
   setup(props) {
     const stored = useStore()
-    const { getUserAndToken, setVisitedUser } = commonService()
-    const { getVisitedUserActivity, visitedUserActivity, isLoaded } = getUserActivity()
+    const { getUserAndToken, setVisitedUser, setUserFollowers, getUserFollowers } = commonService()
+    const { getVisitedUserActivity, visitedUserActivity, isLoaded, getMyFollowers, myFollows } = getUserActivity()
     const { isFollowUser, isFollowBackUser, isUnFollowUser } = userActions()
     const userId = JSON.parse(getUserAndToken('user')).user_id
     const user = ref(props.user)
@@ -146,6 +146,12 @@ export default {
     const followedCount = computed(() => {
       return props.user.following.length
     })
+
+    const myRelationships = async () => {
+      const myFollowers = await getMyFollowers()
+      setUserFollowers(myFollows.value)
+    }
+    myRelationships()
 
     return { followingCount, followedCount, checkFollow, unfollow_user, follow_user, user, isFollow, isFollowUser, isFollowBackUser, isUnFollowUser, viewFollows }
   }

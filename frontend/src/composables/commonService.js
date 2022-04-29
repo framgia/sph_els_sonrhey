@@ -53,7 +53,15 @@ const setterAndGetter = () => {
     return JSON.parse(localStorage.getItem('selectedCategory'))
   }
 
-  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser, setCategorySelected, getCategorySelected, paginationTotal }
+  const setUserFollowers = (myFollowers) => {
+    localStorage.setItem('myFollowers', JSON.stringify(myFollowers))
+  }
+
+  const getUserFollowers = () => {
+    return JSON.parse(localStorage.getItem('myFollowers'))
+  }
+
+  return { setUserAndToken, getUserAndToken, removeUserAndToken, updateUser, settempStore, getTempStore, message, setVisitedUser, getVisitedUser, setCategorySelected, getCategorySelected, paginationTotal, setUserFollowers, getUserFollowers }
 }
 
 export default setterAndGetter
