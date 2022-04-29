@@ -12,14 +12,20 @@
             </li>
           </ul>
           <div class="tab-content" id="myTabContent">
+            <div class="mt-3">
+              <div class="alert alert-success alert-dismissible fade show" :class="{'d-none' : !hideAlert}" role="alert">
+                <strong>Success!</strong> User {{ alertMessage }}
+                <button type="button" class="btn-close" :data-bs-dismiss="{'alert' : !hideAlert}" @click="close_alert" aria-label="Close"></button>
+              </div>
+            </div>
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="following-tab">
               <div class="following-list mt-3">
-                <UserVisitFollowingComponent v-for="follow in following" :key="follow.user_relationship_id" :follow="follow"/>
+                <UserVisitFollowingComponent v-for="follow in following" :key="follow.user_relationship_id" :follow="follow" @showMessage="showMessage"/>
               </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="followers-tab">
               <div class="followers-list mt-3">
-                <UserVisitFollowerComponent v-for="follow in followers" :key="follow.user_relationship_id" :follow="follow"/>
+                <UserVisitFollowerComponent v-for="follow in followers" :key="follow.user_relationship_id" :follow="follow" @showMessage="showMessage"/>
               </div>
             </div>
           </div>
@@ -41,8 +47,10 @@ export default {
     UserVisitFollowerComponent
   },
   setup(props, context) {
-    const following = ref()
-    const followers = ref()
+    const following = ref([])
+    const followers = ref([])
+    const alertMessage = ref('')
+    const hideAlert = ref(false)
 
     watchEffect(() => {
       if (store.state.following.length) {
@@ -53,7 +61,13 @@ export default {
       }
     })
 
-    return { following, followers }
+    const showMessage = (response) => {
+      hideAlert.value = true
+      alertMessage.value = response
+      location.reload()
+    }
+
+    return { following, followers, showMessage, alertMessage, hideAlert }
   }
 }
 </script>
