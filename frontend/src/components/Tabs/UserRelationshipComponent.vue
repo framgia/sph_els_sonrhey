@@ -1,6 +1,6 @@
 <template>
   <div class="modal" tabindex="-1" ref="res" id="followsModal" data-backdrop="static">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content" style="background: #2d3748;">
         <div class="modal-body">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -13,34 +13,14 @@
           </ul>
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="following-tab">
-              <table class="table mt-4">
-                <tbody>
-                  <tr v-for="follow in following" :key="follow.user_relationship_id">
-                    <td>{{ follow.following.full_name }}</td>
-                    <td><a href="#" @click="unfollow_user(follow.following.user_id)">
-                      <span v-if="!isFollow">Unfollow</span>
-                      <span v-else>Unfollowing</span>  
-                    </a></td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="following-list mt-3">
+                  <FollowingListComponent v-for="follow in following" :key="follow.user_relationship_id" :follow="follow" @show="showLoad"/>
+              </div>
             </div>
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="followers-tab">
-              <table class="table mt-4">
-                <tbody>
-                  <tr v-for="follow in followers" :key="follow.user_relationship_id">
-                    <td>{{ follow.followed_back.full_name }}</td>
-                    <td><a href="#" v-if="followed === isUnFollowUser" @click="unfollow_user(follow.followed_back.user_id)">
-                      <span v-if="!isFollow">Unfollow</span>
-                      <span v-else>Unfollowing</span>  
-                    </a></td>
-                    <td><a href="#" v-if="followed === isFollowBackUser" @click="follow_user(follow.followed_back.user_id)">
-                      <span v-if="!isFollow">Follow Back</span>
-                      <span v-else>Following</span>  
-                    </a></td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="followers-list mt-3">
+                <FollowersListComponent v-for="follow in followers" :key="follow.user_relationship_id" :follow="follow" @show="showLoad"/>
+              </div>
             </div>
           </div>
         </div>
@@ -51,22 +31,20 @@
 
 <script>
 import store from '@/store'
-import { ref, watchEffect, computed } from 'vue'
-import commonService from '../../composables/commonService'
-import userActions from '../../composables/userActions'
-import config from '../../composables/config'
-import axios from 'axios'
+import { ref, watchEffect } from 'vue'
+import FollowingListComponent from './FollowingListComponent.vue'
+import FollowersListComponent from './FollowersListComponent.vue'
 
 export default {
   name: 'UserRelationshipComponent',
+  components: {
+    FollowingListComponent,
+    FollowersListComponent
+  },
+  emits: ['show'],
   setup(props, context) {
     const following = ref()
     const followers = ref()
-    const isFollow = ref(false)
-    const { link } = config()
-    const { getUserAndToken } = commonService()
-    const { isFollowBackUser, isUnFollowUser } = userActions()
-    const userId = JSON.parse(getUserAndToken('user')).user_id
 
     watchEffect(() => {
       if (store.state.following.length) {
@@ -77,62 +55,11 @@ export default {
       }
     })
 
-    const followed = computed(() => {
-      if (store.state.following.length) {
-        const isFollow = following.value.filter(q => q.followed_id === userId)
-        if (isFollow.length) {
-          return isUnFollowUser
-        }
-      }
-
-      if (store.state.followers.length) {
-        const followBack = followers.value.filter(q => q.following_id === userId)
-        if (followBack.length) {
-          return isFollowBackUser
-        }
-      }
-    })
-
-    const follow_user = async (user_id) => {
-      isFollow.value = !isFollow.value
-      try {
-        const followIn = {
-          "following_id" : user_id
-        }
-        const follow = await axios.post(`${link}/api/follow`, followIn ,{
-          headers: {
-              Authorization: `Bearer ${getUserAndToken('token')}`
-          }
-        })
-        isFollow.value = !isFollow.value
-        const response = await follow.data.data
-        context.emit('show', response)
-      } catch(e) {
-        console.error(e)
-      }
+    const showLoad = () => {
+      context.emit('show', true)
     }
 
-    const unfollow_user = async (unFollowUserId) => {
-      isFollow.value = !isFollow.value
-      try {
-        const unFollowingIn = {
-          "following_id" : unFollowUserId,
-          "followed_id" : userId
-        }
-        const unfollow = await axios.post(`${link}/api/unfollow`, unFollowingIn ,{
-          headers: {
-            Authorization: `Bearer ${getUserAndToken('token')}`
-          }
-        })
-        isFollow.value = !isFollow.value
-        const response = await unfollow.data.data
-        context.emit('show', response)
-      } catch(e) {
-        console.error(e)
-      }
-    }
-
-    return { following, followers, followed, isFollowBackUser, isUnFollowUser, follow_user, isFollow, unfollow_user }
+    return { following, followers, showLoad }
   }
 }
 </script>
