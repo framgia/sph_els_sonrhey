@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 import config from './config' 
 import commonService from '../composables/commonService'
+import router from '@/router'
 
 const getUserActivity = () => {
   const { link } = config()
@@ -29,7 +30,7 @@ const getUserActivity = () => {
       total.value = response.total
       isLoaded.value = true
     } catch(e) {
-      console.error(e)
+      checkIfAuthorized(e.response.status)
     }
   }
 
@@ -40,13 +41,19 @@ const getUserActivity = () => {
           Authorization: `Bearer ${csvc.getUserAndToken('token')}`
         }
       })
-
       const response = await getactivity.data.data
       allUserActivities.value = response.data
       pages.value = response.links
       isLoaded.value = true
     } catch(e) {
       console.error(e)
+    }
+  }
+
+  const checkIfAuthorized = (status_code) => {
+    if (status_code === 401) {
+      csvc.removeUserAndToken()
+      router.push('/')
     }
   }
 
